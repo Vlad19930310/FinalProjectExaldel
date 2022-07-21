@@ -1,6 +1,12 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+
 stages:
   - build
   - test
+  - deploy
 
 build-code-job:
   stage: build
@@ -14,6 +20,8 @@ test-code-job1:
 
 
 test-code-job2:
-  stage: test
+  stage: deploy
+  image: helm
   script:
-    - echo "If the files are built successfully, test other files with a different command:"
+    - helm repo add jhidalgo3-github https://jhidalgo3.github.io/helm-charts/
+    - helm install my-hello-kubernetes-chart jhidalgo3-github/hello-kubernetes-chart --version 3.0.0 -n hello-test
