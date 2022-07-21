@@ -2,7 +2,6 @@ workflow:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
-
 stages:
   - build
   - test
@@ -21,7 +20,7 @@ test-code-job1:
 
 test-code-job2:
   stage: deploy
-  image: helm
+  image: alpine/helm:3.9.1
   script:
     - ls -la
     - helm repo add jhidalgo3-github https://jhidalgo3.github.io/helm-charts/
