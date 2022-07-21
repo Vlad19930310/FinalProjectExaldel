@@ -23,5 +23,6 @@ test-code-job2:
   stage: deploy
   image: helm
   script:
+    - ls -la
     - helm repo add jhidalgo3-github https://jhidalgo3.github.io/helm-charts/
     - helm install my-hello-kubernetes-chart jhidalgo3-github/hello-kubernetes-chart --version 3.0.0 -n hello-test
