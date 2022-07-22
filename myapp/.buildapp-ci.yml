@@ -1,6 +1,3 @@
-stages:
- - build
-
 build:
   stage: build
   image:

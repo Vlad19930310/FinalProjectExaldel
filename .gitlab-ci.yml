@@ -3,6 +3,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 stages:
+  - build
   - deploy
 
 test-code-job2:
