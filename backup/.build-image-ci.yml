@@ -1,4 +1,4 @@
-build:
+build-backup:
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
