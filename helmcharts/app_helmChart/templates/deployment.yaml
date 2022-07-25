@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name : app-wagtail
-          image: ghcr.io/wagtail:latest
+          image: gcr.io/internship87task8/wagtail:latest
           ports:
             - containerPort: 8000
 
