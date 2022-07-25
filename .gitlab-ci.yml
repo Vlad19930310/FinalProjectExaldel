@@ -21,5 +21,13 @@ test-code-job3:
     - cd helmcharts
     - helm upgrade --install mydemochart mydemo -n test2
 
+deploy-wagtail:
+  stage: deploy
+  image: alpine/helm:3.9.1
+  script:
+    - cd helmcharts
+    - helm upgrade --install wagtail-chart app_helmChart -n wagtail
+
 include: 'myapp/.buildapp-ci.yml'
-include: 'backup/.build-image-ci.yml'
+#include: 'backup/.build-image-ci.yml'
+include: 'application/mysite/.build-wagtail.yml'
