@@ -30,4 +30,4 @@ deploy-wagtail:
 
 #include: 'myapp/.buildapp-ci.yml'
 #include: 'backup/.build-image-ci.yml'
-include: 'application/mysite/.gitlab-ci.yml'
+include: 'application/mysite/.build-wagtail.yml'
