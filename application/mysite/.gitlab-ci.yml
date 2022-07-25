@@ -6,6 +6,6 @@ build-wagtail:
   script:
     - >-
       /kaniko/executor
-      --context "application"
+      --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
       --destination "gcr.io/internship87task8/wagtail:latest"
