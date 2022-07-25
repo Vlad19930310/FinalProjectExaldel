@@ -1,4 +1,4 @@
-build-app:
+build-wagtail:
   stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
@@ -6,6 +6,6 @@ build-app:
   script:
     - >-
       /kaniko/executor
-      --context "wagtail"
+      --context "application"
       --dockerfile "application/mysite/Dockerfile"
       --destination "gcr.io/internship87task8/wagtail:latest"
