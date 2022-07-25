@@ -29,5 +29,5 @@ deploy-wagtail:
     - helm upgrade --install wagtail-chart app_helmChart -n wagtail
 
 include: 'myapp/.buildapp-ci.yml'
-#include: 'backup/.build-image-ci.yml'
-include: 'application/mysite/.gitlab-ci.yml'
+include: 'backup/.build-image-ci.yml'
+#include: 'application/mysite/.gitlab-ci.yml'
