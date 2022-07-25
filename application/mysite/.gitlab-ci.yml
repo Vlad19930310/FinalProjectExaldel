@@ -7,5 +7,5 @@ build-app:
     - >-
       /kaniko/executor
       --context "wagtail"
-      --dockerfile "./Dockerfile"
+      --dockerfile "application/mysite/Dockerfile"
       --destination "gcr.io/internship87task8/myapp:latest"
