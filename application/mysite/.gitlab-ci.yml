@@ -8,4 +8,4 @@ build-app:
       /kaniko/executor
       --context "wagtail"
       --dockerfile "application/mysite/Dockerfile"
-      --destination "gcr.io/internship87task8/myapp:latest"
+      --destination "gcr.io/internship87task8/wagtail:latest"
