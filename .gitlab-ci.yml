@@ -22,4 +22,4 @@ test-code-job3:
     - helm upgrade --install mydemochart mydemo -n test2
 
 include: 'myapp/.buildapp-ci.yml'
-include: 'backup/.build-image-ci.yml'
+include: 'application/mysite.gitlab-ci.yml'
