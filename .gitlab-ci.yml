@@ -6,20 +6,20 @@ stages:
   - build
   - deploy
 
-test-code-job2:
-  stage: deploy
-  image: alpine/helm:3.9.1
-  script:
-    - ls -la
-    - helm repo add jhidalgo3-github https://jhidalgo3.github.io/helm-charts/
-    - helm upgrade --install my-hello-kubernetes-chart jhidalgo3-github/hello-kubernetes-chart --version 3.0.0 -n hello-test
+# test-code-job2:
+#   stage: deploy
+#   image: alpine/helm:3.9.1
+#   script:
+#     - ls -la
+#     - helm repo add jhidalgo3-github https://jhidalgo3.github.io/helm-charts/
+#     - helm upgrade --install my-hello-kubernetes-chart jhidalgo3-github/hello-kubernetes-chart --version 3.0.0 -n hello-test
 
-test-code-job3:
-  stage: deploy
-  image: alpine/helm:3.9.1
-  script:
-    - cd helmcharts
-    - helm upgrade --install mydemochart mydemo -n test2
+# test-code-job3:
+#   stage: deploy
+#   image: alpine/helm:3.9.1
+#   script:
+#     - cd helmcharts
+#     - helm upgrade --install mydemochart mydemo -n test2
 
 deploy-wagtail:
   stage: deploy
@@ -28,6 +28,6 @@ deploy-wagtail:
     - cd helmcharts
     - helm upgrade --install wagtail-chart app_helmChart -n wagtail
 
-include: 'myapp/.buildapp-ci.yml'
+#include: 'myapp/.buildapp-ci.yml'
 include: 'backup/.build-image-ci.yml'
 #include: 'application/mysite/.gitlab-ci.yml'
