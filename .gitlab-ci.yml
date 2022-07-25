@@ -26,7 +26,7 @@ deploy-wagtail:
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
-    - helm upgrade --install wagtail-chart app_helmChart -n wagtail
+    - helm upgrade --install wagtail-chart app_helmChart -n postgresql
 
 #include: 'myapp/.buildapp-ci.yml'
 #include: 'backup/.build-image-ci.yml'
