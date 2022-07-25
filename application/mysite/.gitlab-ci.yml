@@ -1,0 +1,11 @@
+build-app:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - >-
+      /kaniko/executor
+      --context "myapp"
+      --dockerfile "./Dockerfile"
+      --destination "gcr.io/internship87task8/wagtail:latest"
