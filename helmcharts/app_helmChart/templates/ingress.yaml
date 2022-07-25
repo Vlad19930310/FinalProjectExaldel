@@ -9,9 +9,22 @@ spec:
   tls:
   - hosts:
     - wagtail.prtest.tech
+    - sonar.prtest.tech
     
     secretName: app-tls
   rules:
+   
+   - host: sonar.prtest.tech
+     http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: sonarqube
+                port: 
+                  number: 9000   
+
    - host: wagtail.prtest.tech
      http:
         paths:
