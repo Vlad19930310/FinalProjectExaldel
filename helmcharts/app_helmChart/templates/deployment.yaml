@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name : app-wagtail
-          image: vlad19930310/zhaludkovichdocker:wagtail
+          image: ghcr.io/wagtail:latest
           ports:
             - containerPort: 8000
 
