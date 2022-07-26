@@ -15,10 +15,10 @@ spec:
         project: {{ .Values.app.project }}   # Service will look for those PODS Labels!!!
     spec:
       containers:
-        - name : {{ .Values.app.apiVersion}}
-          image: {{ .Values.app.apiVersion}}
+        - name : {{ .Values.containers.app.name}}
+          image: {{ .Values.containers.app.image}}
           ports:
-            - containerPort: {{ .Values.app.apiVersion}}
+            - containerPort: {{ .Values.containers.app.containerPort}}
 
 
 ---
