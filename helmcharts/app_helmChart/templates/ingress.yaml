@@ -9,12 +9,12 @@ spec:
   tls:
   - hosts:
     - wagtail.prtest.tech
-    - sonar.prtest.tech
+    - sonar.prtest.tech   
     
     secretName: app-tls
   rules:
-   
-   - host: sonar.prtest.tech
+
+  - host: sonar.prtest.tech
      http:
         paths:
           - pathType: Prefix
