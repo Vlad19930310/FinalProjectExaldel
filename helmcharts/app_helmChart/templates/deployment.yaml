@@ -1,5 +1,5 @@
 
-apiVersion : {{ .Values.app.apiVersion} }
+apiVersion : {{ .Values.app.apiVersion}}
 kind: Deployment
 metadata:
   name: {{ .Values.app.metadata.name }}
