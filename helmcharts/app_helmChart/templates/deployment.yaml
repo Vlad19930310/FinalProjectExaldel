@@ -1,24 +1,24 @@
 
-apiVersion : {{ .Values.app.apiVersion}}
+apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.app.metadata.name }}
+  name: web-deployment-autoscaling
   labels:
-    app : {{ .Values.app.metadata.labels.app }}
+    app : k8s-deployment
 spec:
   selector:
     matchLabels:
-      project: {{ .Values.app.project }}
+      project: internship87task8
   template:
     metadata:
       labels:
-        project: {{ .Values.app.project }}   # Service will look for those PODS Labels!!!
+        project: internship87task8   # Service will look for those PODS Labels!!!
     spec:
       containers:
-        - name : {{ .Values.containers.app.name}}
-          image: {{ .Values.containers.app.image}}
+        - name : app-wagtail
+          image: gcr.io/internship87task8/wagtail:latest
           ports:
-            - containerPort: {{ .Values.containers.app.containerPort}}
+            - containerPort: 8000
 
 
 ---
