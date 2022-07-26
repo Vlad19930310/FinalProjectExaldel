@@ -15,8 +15,8 @@ spec:
   rules:
 
   - host: sonar.prtest.tech
-     http:
-        paths:
+    http:
+       paths:
           - pathType: Prefix
             path: /
             backend:
