@@ -8,5 +8,9 @@
 7. add to ```requirements.txt``` strings ```psycopg2-binary>=2.8<2.9``` ```gunicorn==20.0.4```
 8. pip install -r requirements.txt
 9. Docker must be installed on system
-10. run Postgresql image with parametrs ```docker run --name <future name your conteiner> -e POSTGRES_PASSWORD=<your password> -d -p 5432:5432 postgres
-11.
+10. Configure ```Dockerfile``` with your configuration
+11. Buld image ```docker build -t wagtail .``` in root derictory of project
+13. Test your image
+14. run Postgresql image with parametrs ```docker run --name <future name your conteiner> -e POSTGRES_PASSWORD=<your password> -d -p 5432:5432 postgres
+15. Run container from your builded image with wagtaill app
+16. Create two pods in same namespace one - statefull postgressql 
