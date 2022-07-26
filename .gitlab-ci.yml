@@ -10,7 +10,7 @@ stages:
 sonarqube-check:
   stage: sonar-scan
   tags:
-    - docker
+#    - docker
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
