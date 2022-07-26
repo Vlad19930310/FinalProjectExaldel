@@ -7,7 +7,7 @@ metadata:
      env  : prod
 spec:
   selector:
-    project: internship87task8     # Selecting PODs with those Labels
+    project: {{ .Values.app.project }}    # Selecting PODs with those Labels
   ports:
     - name      : app-listener
       protocol  : TCP
