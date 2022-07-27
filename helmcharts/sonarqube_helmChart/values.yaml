@@ -1,0 +1,41 @@
+#namespace for deploy
+namespace: testing
+
+#SonarQube default values 
+app:
+  name: sonarqube
+  containerPort: 9000
+  replicas: 1
+  service:
+    port: 80
+    targetPort: 9000
+  ingress:
+    name: sonarqube-server
+  volume: 
+    name: sonar-data
+    size: 10Gi
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+    limits:
+      cpu: 2000m
+      memory: 2048Mi
+      
+#PostgreSQL
+db:
+  name: postgres
+  port: 5432
+  replicas: 1
+  secretname: postgres-secret
+  service:
+    port: 5432
+    targetPort: 5432
+  volume:
+    size: 2Gi
+    name: postgres-data
+
+#docker images:
+containers:
+  app_image: sonarqube:9.1.0-community
+  db_image: postgres:10.4

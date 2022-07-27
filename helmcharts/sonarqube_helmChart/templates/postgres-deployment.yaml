@@ -1,0 +1,53 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.db.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  serviceName: {{ .Values.db.name }}
+  selector:
+    matchLabels:
+      app: {{ .Values.db.name }}
+  replicas: {{ .Values.db.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.db.name }}
+    spec:
+      containers:
+        - name: {{ .Values.db.name }}
+          image: {{ .Values.containers.db_image }}
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: {{ .Values.db.port }}
+          env:
+          - name: PGDATA
+            value: /var/lib/postgresql/data/pgdata
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.db.secretname }}
+                key: POSTGRESQL_DATABASE
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.db.secretname }}
+                key: POSTGRESQL_USERNAME
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.db.secretname }}
+                key: POSTGRESQL_PASSWORD
+          volumeMounts:
+          - name: {{ .Values.db.volume.name }}
+            mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.db.volume.name }}
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.db.volume.size }}
