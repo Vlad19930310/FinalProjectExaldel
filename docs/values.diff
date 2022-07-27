@@ -1,0 +1,129 @@
+--- g1/values.yaml	2022-07-21 00:04:57.000000000 +0300
++++ values.yaml	2022-07-20 13:14:53.113422100 +0300
+@@ -43,18 +43,18 @@
+ # replicas: 1
+ 
+ ## How many old ReplicaSets for this Deployment you want to retain
+-# revisionHistoryLimit: 10
++revisionHistoryLimit: 10
+ 
+ ## The GitLab Server URL (with protocol) that want to register the runner against
+-## ref: https://docs.gitlab.com/runner/commands/index.html#gitlab-runner-register
++## ref: https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-register
+ ##
+-# gitlabUrl: http://gitlab.your-domain.com/
++gitlabUrl: https://gitlab.com/
+ 
+ ## The Registration Token for adding new Runners to the GitLab Server. This must
+ ## be retrieved from your GitLab Instance.
+-## ref: https://docs.gitlab.com/ce/ci/runners/index.html
++## ref: https://docs.gitlab.com/ce/ci/runners/README.html
+ ##
+-# runnerRegistrationToken: ""
++runnerRegistrationToken: "*******************"
+ 
+ ## The Runner Token for adding new Runners to the GitLab Server. This must
+ ## be retrieved from your GitLab Instance. It is token of already registered runner.
+@@ -68,19 +68,19 @@
+ ## Updating the runner's chart version or configuration will cause the runner container
+ ## to be terminated and created again. This may cause your GitLab instance to reference
+ ## non-existant runners. Un-registering the runner before termination mitigates this issue.
+-## ref: https://docs.gitlab.com/runner/commands/index.html#gitlab-runner-unregister
++## ref: https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-unregister
+ ##
+ ## Please set unregisterRunners to false if you set unregisterRunner to true as only
+ ## one preStop action is supported.
+ ##
+-# unregisterRunner: true
++unregisterRunner: true
+ 
+ ## Unregister all runners before termination
+ ##
+ ## Updating the runner's chart version or configuration will cause the runner container
+ ## to be terminated and created again. This may cause your Gitlab instance to reference
+ ## non-existant runners. Un-registering the runner before termination mitigates this issue.
+-## ref: https://docs.gitlab.com/runner/commands/index.html#gitlab-runner-unregister
++## ref: https://docs.gitlab.com/runner/commands/README.html#gitlab-runner-unregister
+ ##
+ # unregisterRunners: true
+ 
+@@ -95,14 +95,14 @@
+ ## Set the certsSecretName in order to pass custom certficates for GitLab Runner to use
+ ## Provide resource name for a Kubernetes Secret Object in the same namespace,
+ ## this is used to populate the /home/gitlab-runner/.gitlab-runner/certs/ directory
+-## ref: https://docs.gitlab.com/runner/configuration/tls-self-signed.html#supported-options-for-self-signed-certificates-targeting-the-gitlab-server
++## ref: https://docs.gitlab.com/runner/configuration/tls-self-signed.html#supported-options-for-self-signed-certificates
+ ##
+ # certsSecretName:
+ 
+ ## Configure the maximum number of concurrent jobs
+ ## ref: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-global-section
+ ##
+-concurrent: 10
++concurrent: 2
+ 
+ ## Defines in seconds how often to check GitLab for a new builds
+ ## ref: https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-global-section
+@@ -150,7 +150,7 @@
+ 
+ ## For RBAC support:
+ rbac:
+-  create: false
++  create: true
+ 
+   ## Define specific rbac permissions.
+   ## DEPRECATED: see .Values.rbac.rules
+@@ -171,7 +171,7 @@
+ 
+   ## Run the gitlab-bastion container with the ability to deploy/manage containers of jobs
+   ## cluster-wide or only within namespace
+-  clusterWideAccess: false
++  clusterWideAccess: true
+ 
+   ## Use the following Kubernetes Service Account name if RBAC is disabled in this Helm chart (see rbac.create)
+   ##
+@@ -186,7 +186,7 @@
+   ## Use podSecurity Policy
+   ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+   podSecurityPolicy:
+-    enabled: false
++    enabled: true
+     resourceNames:
+     - gitlab-runner
+ 
+@@ -201,7 +201,7 @@
+ ## ref: https://docs.gitlab.com/runner/monitoring/#configuration-of-the-metrics-http-server
+ ##
+ metrics:
+-  enabled: false
++  enabled: true
+ 
+   ## Define a name for the metrics port
+   ##
+@@ -256,7 +256,7 @@
+ ## Configure a service resource e.g., to allow scraping metrics via
+ ## prometheus-operator serviceMonitor
+ service:
+-  enabled: false
++  enabled: true
+ 
+   ## Provide additonal labels for the service
+   ##
+@@ -325,7 +325,7 @@
+     [[runners]]
+       [runners.kubernetes]
+         namespace = "{{.Release.Namespace}}"
+-        image = "ubuntu:16.04"
++        image = "ubuntu:20.04"
+ 
+   ## Which executor should be used
+   ##
+@@ -531,7 +531,7 @@
+ 
+   ## Service Account to be used for runners
+   ##
+-  # serviceAccountName:
++  serviceAccountName: gitlab-runner
+ 
+   ## If Gitlab is not reachable through $CI_SERVER_URL
+   ##

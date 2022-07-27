@@ -87,10 +87,10 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'PqEB2cYZ9q2DAA5F',
-        'HOST': '10.76.12.100',
+        'NAME': 'wagtail',
+        'USER': 'wagtail',
+        'PASSWORD': 'MWYyZDFlMmU2N2Rm',
+        'HOST': '10.72.2.244',
         'PORT': '5432',
     }
 }
