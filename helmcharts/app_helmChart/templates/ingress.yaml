@@ -1,25 +1,38 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: {{ .Values.ingress.apiVersion }}
 kind: Ingress
 metadata:
-  name: main-ingress
+  name: {{ .Values.ingress.name }}
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   tls:
   - hosts:
-    - wagtail.prtest.tech
+    - {{ .Values.ingress.app.host }}
+    - {{ .Values.ingress.sonarqube.host }}   
     
-    secretName: app-tls
+    secretName: {{ .Values.ingress.secretName }}
   rules:
-   - host: wagtail.prtest.tech
-     http:
+
+  - host: {{ .Values.ingress.app.host }}
+    http:
         paths:
-          - pathType: Prefix
-            path: /
+          - pathType: {{ .Values.ingress.app.pathType }}
+            path: {{ .Values.ingress.app.path }}
             backend:
               service:
-                name: autoscaling-pod-service
+                name: {{ .Values.ingress.app.name }}
                 port: 
-                  number: 8000
+                  number: {{ .Values.ingress.app.port.number }}  
+
+  - host: {{ .Values.ingress.sonarqube.host }}
+    http:
+        paths:
+          - pathType: {{ .Values.ingress.sonarqube.pathType }}
+            path: {{ .Values.ingress.sonarqube.path }}
+            backend:
+              service:
+                name: {{ .Values.ingress.sonarqube.name }}
+                port: 
+                  number: {{ .Values.ingress.sonarqube.port.number }}   
    

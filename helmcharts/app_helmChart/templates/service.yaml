@@ -1,16 +1,16 @@
 
-apiVersion: v1
+apiVersion: {{ .Values.service.apiVersion }}
 kind: Service
 metadata:
-  name: autoscaling-pod-service
+  name: {{ .Values.service.name }}
   labels:
-     env  : prod
+     env  : {{ .Values.service.metadata.labels.env }}
 spec:
   selector:
-    project: internship87task8     # Selecting PODs with those Labels
+    project: {{ .Values.app.project }}     # Selecting PODs with those Labels
   ports:
-    - name      : app-listener
-      protocol  : TCP
-      port      : 80  # Port on Load Balancer
-      targetPort: 8000  # Port on Pod
-  type: ClusterIP
+    - name      : {{ .Values.service.ports.name }}
+      protocol  : {{ .Values.service.ports.protocol }}
+      port      : {{ .Values.service.ports.port }}  # Port on Load Balancer
+      targetPort: {{ .Values.service.ports.targetPort }}  # Port on Pod
+  type: {{ .Values.service.type }}
