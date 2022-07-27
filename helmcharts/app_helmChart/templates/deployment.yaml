@@ -1,45 +1,45 @@
 
-apiVersion : apps/v1
+apiVersion : {{ .Values.app.apiVersion }}
 kind: Deployment
 metadata:
-  name: web-deployment-autoscaling
+  name: {{ .Values.app.name }}
   labels:
-    app : k8s-deployment
+    app : {{ .Values.app.metadata.labels.app }}
 spec:
   selector:
     matchLabels:
-      project: internship87task8
+      project: {{ .Values.app.project }}
   template:
     metadata:
       labels:
-        project: internship87task8   # Service will look for those PODS Labels!!!
+        project: {{ .Values.app.project }}   # Service will look for those PODS Labels!!!
     spec:
       containers:
-        - name : app-wagtail
-          image: gcr.io/internship87task8/wagtail:latest
+        - name : {{ .Values.containers.app.name }}
+          image: {{ .Values.containers.app.image }}
           ports:
-            - containerPort: 8000
+            - containerPort: {{ .Values.containers.app.ports.containerPort }}
 
 
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: {{ .Values.HPA.apiVersion }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: autoscaling
+  name: {{ .Values.HPA.name }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v2beta2
+    apiVersion: {{ .Values.HPA.spec.scaleTargetRef.apiVersion }}
     kind: Deployment
-    name: web-deployment-autoscaling
-  minReplicas: 2
-  maxReplicas: 6
+    name: {{ .Values.HPA.spec.scaleTargetRef.name }}
+  minReplicas: {{ .Values.HPA.minReplicas }}
+  maxReplicas: {{ .Values.HPA.minReplicas }}
   metrics:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 70
+      targetAverageUtilization: {{ .Values.HPA.cpu.targetAverageUtilization }}
   - type: Resource
     resource:
       name: memory
-      targetAverageUtilization: 80
+      targetAverageUtilization: 8{{ .Values.HPA.memory.targetAverageUtilization }}
 
