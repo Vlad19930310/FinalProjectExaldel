@@ -22,7 +22,7 @@ spec:
 
 
 ---
-apiVersion: {{ .Values.HPA.apiVersion }}
+apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ .Values.HPA.name }}
