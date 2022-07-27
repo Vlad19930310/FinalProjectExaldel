@@ -1,5 +1,5 @@
 
-apiVersion: v1
+apiVersion: {{ .Values.service.apiVersion }}
 kind: Service
 metadata:
   name: {{ .Values.service.name }}

@@ -1,5 +1,5 @@
 
-apiVersion : apps/v1 
+apiVersion : {{ .Values.app.apiVersion }}
 kind: Deployment
 metadata:
   name: {{ .Values.app.name }}
@@ -22,7 +22,7 @@ spec:
 
 
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: {{ .Values.HPA.apiVersion }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ .Values.HPA.name }}
