@@ -37,14 +37,7 @@ service:
 ingress:
   apiVersion: networking.k8s.io/v1  
   name: main-ingress  
-  secretName: app-tls    
-  sonarqube:
-    host: sonar.prtest.tech          
-    pathType: Prefix
-    path: /              
-    name: sonarqube
-    port: 
-      number: 9000   
+  secretName: app-tls      
   app:
     host: dev.prtest.tech          
     pathType: Prefix
@@ -60,16 +53,16 @@ containers:
     ports:
       containerPort: 8000
     env:
-      - name: USERNAME
-        valueFrom:
-          secretKeyRef:
-            name: mysecret
-            key: username
-      - name: PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: mysecret
-            key: password
+    - name: USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: mysecret
+          key: username
+    - name: PASSWORD
+      valueFrom:
+        secretKeyRef:
+           name: mysecret
+           key: password
 
 prod_Clusterissuer:
   apiVersion: cert-manager.io/v1
