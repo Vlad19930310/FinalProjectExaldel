@@ -9,7 +9,7 @@ metadata:
     cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
   rules:
-  - host: sonarqube.radiolacator.ru
+  - host: sonar.prtest.tech
     http:
       paths:
       - path: /
@@ -18,5 +18,5 @@ spec:
           servicePort: {{ .Values.app.containerPort }}
   tls:
   - hosts:
-    - sonarqube.radiolacator.ru
+    - sonar.prtest.tech
     secretName: sonarqube-tls   
