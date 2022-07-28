@@ -46,6 +46,7 @@ deploy-wagtail:
   script:
     - cd helmcharts
     - helm upgrade --install wagtail-chart app_helmChart -n dev
+  when: manual  
 
 # health-wagtail:
 #   stage: test
