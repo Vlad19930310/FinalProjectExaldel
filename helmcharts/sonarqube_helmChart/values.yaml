@@ -1,9 +1,10 @@
 #namespace for deploy
-namespace: testing
+# namespace: ops
 
 #SonarQube default values 
 app:
   name: sonarqube
+  secretName: app-tls
   containerPort: 9000
   replicas: 1
   service:
