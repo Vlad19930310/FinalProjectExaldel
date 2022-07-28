@@ -4,7 +4,7 @@ workflow:
 
 stages:
  # - sonar-scan
- # - build
+  - build
   - deploy
   
 # sonarqube-check:
@@ -56,4 +56,4 @@ deploy-wagtail:
 
 #include: 'myapp/.buildapp-ci.yml'
 #include: 'backup/.build-image-ci.yml'
-#include: 'application/mysite/.build-wagtail.yml'
+include: 'application/mysite/.build-wagtail.yml'
