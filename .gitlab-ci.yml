@@ -6,7 +6,7 @@ stages:
 # - sonar-scan
  - build
  - deploy
- - helth
+ - health
   
 #sonarqube-check:
 #  stage: sonar-scan
