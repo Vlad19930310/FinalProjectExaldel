@@ -4,3 +4,10 @@ workflow:
 
 stages:
   - test-stage
+
+health-wagtail-dev:
+  stage: test-stage
+  image: wbitt/network-multitool
+  script:
+    - nslookup dev.prtest.tech
+
