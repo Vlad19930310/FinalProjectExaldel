@@ -1,22 +1,26 @@
 ---
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Values.app.name }}
-  namespace: {{ .Values.namespace }}
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: "letsencrypt"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
-  rules:
-  - host: sonar.prtest.tech
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: {{ .Values.app.name }}
-          servicePort: {{ .Values.app.containerPort }}
   tls:
   - hosts:
     - sonar.prtest.tech
-    secretName: sonarqube-tls   
+    secretName: {{ .Values.app.secretName }}
+  rules:
+  - host: sonar.prtest.tech
+    http:    
+      paths:
+      - pathType: Prefix      
+        path: /
+        backend:
+          service:
+            name: {{ .Values.app.name }}
+            port:
+              number: {{ .Values.app.containerPort }}
+          
+  
