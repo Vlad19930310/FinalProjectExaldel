@@ -16,7 +16,7 @@ stages:
 
 second-pipline:
   stage: Trigger-second-pipline
-  trigger: application/mysite
+  trigger: application/mysite/.gitlab-ci.yml
 
 sonar-scan-dev:
   stage: sonar-scan-dev
