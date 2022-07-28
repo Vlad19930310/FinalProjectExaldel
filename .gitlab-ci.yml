@@ -3,7 +3,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 stages:
- # - sonar-scan
+  - sonar-scan
   - build
   - deploy
   
