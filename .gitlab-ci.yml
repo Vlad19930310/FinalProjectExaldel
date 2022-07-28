@@ -6,6 +6,7 @@ stages:
 # - sonar-scan
  - build
  - deploy
+ - helth
   
 #sonarqube-check:
 #  stage: sonar-scan
@@ -46,6 +47,13 @@ deploy-wagtail:
   script:
     - cd helmcharts
     - helm upgrade --install wagtail-chart app_helmChart -n postgresql
+
+health-wagtail:
+  stage: health
+  image: wbitt/network-multitool
+  script:
+    - nslookup wagtail.prtest.tech
+       
 
 #include: 'myapp/.buildapp-ci.yml'
 #include: 'backup/.build-image-ci.yml'
