@@ -1,0 +1,22 @@
+image:
+  name: gcr.io/internship87task8/backup:14.4.0-debian-11-r12
+  pullpolicy: Always
+resources:
+  limits:
+    cpu: 500m
+    memory: 250Mi
+  requests:
+    cpu: 1m
+    memory: 10Mi
+serviceAccount: backup
+imagePullSecrets:
+  - name: gcr-json-key
+restartPolicy: OnFailure
+secret:
+  name: postgre-secret
+  key: password
+database:
+  name: wagtail
+  user: wagtail
+schedule: "8 * * * *"
+bucket:  "gs://backuppostgre"

@@ -1,0 +1,45 @@
+
+apiVersion : {{ .Values.app.apiVersion }}
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}
+  labels:
+    app : {{ .Values.app.metadata.labels.app }}
+spec:
+  selector:
+    matchLabels:
+      project: {{ .Values.app.project }}
+  template:
+    metadata:
+      labels:
+        project: {{ .Values.app.project }}   # Service will look for those PODS Labels!!!
+    spec:
+      containers:
+        - name : {{ .Values.containers.app.name }}
+          image: {{ .Values.containers.app.image }}
+          ports:
+            - containerPort: {{ .Values.containers.app.ports.containerPort }}
+
+
+---
+apiVersion: {{ .Values.HPA.apiVersion }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.HPA.name }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ .Values.HPA.spec.scaleTargetRef.apiVersion }}
+    kind: Deployment
+    name: {{ .Values.HPA.spec.scaleTargetRef.name }}
+  minReplicas: {{ .Values.HPA.minReplicas }}
+  maxReplicas: {{ .Values.HPA.minReplicas }}
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      targetAverageUtilization: {{ .Values.HPA.cpu.targetAverageUtilization }}
+  - type: Resource
+    resource:
+      name: memory
+      targetAverageUtilization: 8{{ .Values.HPA.memory.targetAverageUtilization }}
+
