@@ -34,11 +34,11 @@ deploy-dev:
     - helm upgrade --install wagtail-chart app_helmChart -n dev
     
 
-  health-wagtail:
-    stage: test
-    image: wbitt/network-multitool
-    script:
-      - nslookup wagtail.prtest.tech
+health-wagtail:
+  stage: test
+  image: wbitt/network-multitool
+  script:
+    - nslookup wagtail.prtest.tech
 
        
 
