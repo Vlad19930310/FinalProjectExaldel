@@ -54,7 +54,7 @@ health-wagtail-dev:
   stage: test-dev
   image: wbitt/network-multitool
   script:
-    - nslookup wagtail.prtest.tech
+    - nslookup dev.prtest.tech
       
 sonar-scan-stage:
   stage: sonar-scan-stage
@@ -93,7 +93,7 @@ deploy-stage:
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
-    - helm upgrade --install wagtail-chart app_helmChart -n dev    
+    - helm upgrade --install wagtail-chart app_helmChart -n stage    
   needs: [build-wagtail-stage]
 
 
@@ -101,7 +101,7 @@ health-wagtail-stage:
   stage: test-stage
   image: wbitt/network-multitool
   script:
-    - nslookup wagtail.prtest.tech
+    - nslookup stage.prtest.tech
   needs: [deploy-stage]  
 
 deploy-production:
@@ -109,7 +109,7 @@ deploy-production:
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
-    - helm upgrade --install wagtail-chart app_helmChart -n dev    
+    - helm upgrade --install wagtail-chart app_helmChart -n production    
   when: manual
 
 
