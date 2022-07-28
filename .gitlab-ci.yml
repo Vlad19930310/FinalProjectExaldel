@@ -6,6 +6,7 @@ stages:
   - sonar-scan
   - build
   - deploy
+  - test
   
 sonarqube-check:
   stage: sonar-scan
@@ -25,36 +26,22 @@ sonarqube-check:
     - sonar-scanner
   allow_failure: true
 
-# test-code-job2:
-#   stage: deploy
-#   image: alpine/helm:3.9.1
-#   script:
-#     - ls -la
-#     - helm repo add jhidalgo3-github https://jhidalgo3.github.io/helm-charts/
-#     - helm upgrade --install my-hello-kubernetes-chart jhidalgo3-github/hello-kubernetes-chart --version 3.0.0 -n hello-test
-
-# test-code-job3:
-#   stage: deploy
-#   image: alpine/helm:3.9.1
-#   script:
-#     - cd helmcharts
-#     - helm upgrade --install mydemochart mydemo -n test2
-
-deploy-wagtail:
+deploy-dev:
   stage: deploy
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
     - helm upgrade --install wagtail-chart app_helmChart -n dev
-  when: manual  
+    
 
-# health-wagtail:
-#   stage: test
-#   image: wbitt/network-multitool
-#   script:
-#     - nslookup wagtail.prtest.tech
+  health-wagtail:
+    stage: test
+    image: wbitt/network-multitool
+    script:
+      - nslookup wagtail.prtest.tech
+
        
 
 #include: 'myapp/.buildapp-ci.yml'
 #include: 'backup/.build-image-ci.yml'
-include: 'application/mysite/.build-wagtail.yml'
+include: 'application/mysite/.build-dev.yml'
