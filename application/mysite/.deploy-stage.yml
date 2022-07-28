@@ -1,0 +1,6 @@
+deploy-stage:
+  stage: deploy
+  image: alpine/helm:3.9.1
+  script:
+    - cd helmcharts
+    - helm upgrade --install wagtail-chart app_helmChart -n dev
