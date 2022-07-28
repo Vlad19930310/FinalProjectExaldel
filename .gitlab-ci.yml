@@ -3,10 +3,9 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 stages:
-# - sonar-scan
- - build
- - deploy
- - test
+ # - sonar-scan
+ # - build
+  - deploy
   
 #sonarqube-check:
 #  stage: sonar-scan
@@ -46,7 +45,7 @@ deploy-wagtail:
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
-    - helm upgrade --install wagtail-chart app_helmChart -n postgresql
+    - helm upgrade --install wagtail-chart app_helmChart -n dev
 
 health-wagtail:
   stage: test
@@ -57,4 +56,4 @@ health-wagtail:
 
 #include: 'myapp/.buildapp-ci.yml'
 #include: 'backup/.build-image-ci.yml'
-include: 'application/mysite/.build-wagtail.yml'
+#include: 'application/mysite/.build-wagtail.yml'
