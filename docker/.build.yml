@@ -1,0 +1,31 @@
+build-wagtail:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - >-
+      /kaniko/executor
+      --context "application/mysite"
+      --dockerfile "application/mysite/Dockerfile"
+      --destination "gcr.io/internship87task8/wagtail:latest"
+  rules:
+  - changes:
+    -  docker/application/**/*
+    - .gitlab-ci.yml 
+
+build-backup:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - >-
+      /kaniko/executor
+      --context "backup"
+      --dockerfile "backup/Dockerfile"
+      --destination "$BACKUP_IMAGE"
+  rules:
+  - changes:
+    -  docker/backup/**/*
+    - .gitlab-ci.yml 

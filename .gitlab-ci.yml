@@ -1,10 +1,13 @@
-workflow:
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+variables:
+  BACKUP_IMAGE: "gcr.io/internship87task8/backup:14.4.0-debian-11-r12"
+  DATABASE_NAMESPACE: "postgres-app"
+  APP_NAMESPACE: "postgresql"
 
 stages:
 # - sonar-scan
  - build
+ - lint
+ - test
  - deploy
   
 #sonarqube-check:
@@ -25,28 +28,13 @@ stages:
 #    - sonar-scanner
 #  allow_failure: true
 
-# test-code-job2:
-#   stage: deploy
-#   image: alpine/helm:3.9.1
-#   script:
-#     - ls -la
-#     - helm repo add jhidalgo3-github https://jhidalgo3.github.io/helm-charts/
-#     - helm upgrade --install my-hello-kubernetes-chart jhidalgo3-github/hello-kubernetes-chart --version 3.0.0 -n hello-test
-
-# test-code-job3:
-#   stage: deploy
-#   image: alpine/helm:3.9.1
-#   script:
-#     - cd helmcharts
-#     - helm upgrade --install mydemochart mydemo -n test2
-
-deploy-wagtail:
-  stage: deploy
-  image: alpine/helm:3.9.1
-  script:
-    - cd helmcharts
-    - helm upgrade --install wagtail-chart app_helmChart -n postgresql
-
-#include: 'myapp/.buildapp-ci.yml'
-#include: 'backup/.build-image-ci.yml'
-include: 'application/mysite/.build-wagtail.yml'
+include: 
+  - local: 'docker/.build.yml'  
+    rules:  
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  - local: 'helm/.lint.yaml'
+    rules:
+      - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  - local: 'helm/.deploy.yml'
+    rules:
+      - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
