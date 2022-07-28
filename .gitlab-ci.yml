@@ -3,14 +3,18 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 stages:
-  - sonar-scan
-  #- build
-  - deploy
-  - test
-  - health
+  - sonar-scan-dev
+  - build-dev
+  - deploy-dev
+  - test-dev
+  - sonar-scan-stage
+  - build-stage
+  - deploy-stage
+  - test-stage
+  - deploy-production
   
-sonarqube-check:
-  stage: sonar-scan
+sonar-scan-dev:
+  stage: sonar-scan-dev
   tags:
 #    - docker
   image:
@@ -27,31 +31,83 @@ sonarqube-check:
     - sonar-scanner
   allow_failure: true
 
+build-wagtail-dev:
+  stage: build-dev
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - >-
+      /kaniko/executor
+      --context "application/mysite"
+      --dockerfile "application/mysite/Dockerfile"
+      --destination "gcr.io/internship87task8/wagtail:latest"
+
 deploy-dev:
-  stage: deploy
+  stage: deploy-dev
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
-    - helm upgrade --install wagtail-chart app_helmChart -n dev
-    
+    - helm upgrade --install wagtail-chart app_helmChart -n dev    
 
-health-wagtail:
-  stage: test
+health-wagtail-dev:
+  stage: test-dev
+  image: wbitt/network-multitool
+  script:
+    - nslookup wagtail.prtest.tech
+      
+sonar-scan-stage:
+  stage: sonar-scan-stage
+  tags:
+#    - docker
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - sonar-scanner
+  allow_failure: true
+  when: manual
+
+build-wagtail-stage:
+  stage: build-stage
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - >-
+      /kaniko/executor
+      --context "application/mysite"
+      --dockerfile "application/mysite/Dockerfile"
+      --destination "gcr.io/internship87task8/wagtail:latest"
+
+deploy-stage:
+  stage: deploy-stage
+  image: alpine/helm:3.9.1
+  script:
+    - cd helmcharts
+    - helm upgrade --install wagtail-chart app_helmChart -n dev    
+
+health-wagtail-stage:
+  stage: test-stage
   image: wbitt/network-multitool
   script:
     - nslookup wagtail.prtest.tech
 
-health-wagtail-test:
-  stage: health
-  image: wbitt/network-multitool
+deploy-production:
+  stage: deploy-production
+  image: alpine/helm:3.9.1
   script:
-    - nslookup wagtail.prtest.tech
-       
+    - cd helmcharts
+    - helm upgrade --install wagtail-chart app_helmChart -n dev    
+  when: manual
 
-#include: 'myapp/.buildapp-ci.yml'
-#include: 'backup/.build-image-ci.yml'
-#include: 'application/mysite/.build-dev.yml'
-#include: 'application/mysite/.build-stage.yml'
-#include: 'application/mysite/.build-production.yml'
+
 
 
