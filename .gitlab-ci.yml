@@ -6,7 +6,7 @@ stages:
 # - sonar-scan
  - build
  - deploy
- - health
+ - test
   
 #sonarqube-check:
 #  stage: sonar-scan
@@ -49,7 +49,7 @@ deploy-wagtail:
     - helm upgrade --install wagtail-chart app_helmChart -n postgresql
 
 health-wagtail:
-  stage: health
+  stage: test
   image: wbitt/network-multitool
   script:
     - nslookup wagtail.prtest.tech
