@@ -47,6 +47,13 @@ deploy-wagtail:
     - cd helmcharts
     - helm upgrade --install wagtail-chart app_helmChart -n dev
 
+health-wagtail:
+  stage: test
+  image: wbitt/network-multitool
+  script:
+    - nslookup wagtail.prtest.tech
+       
+
 #include: 'myapp/.buildapp-ci.yml'
 #include: 'backup/.build-image-ci.yml'
 #include: 'application/mysite/.build-wagtail.yml'
