@@ -8,8 +8,7 @@ metadata:
 spec:
   tls:
   - hosts:
-    - {{ .Values.ingress.app.host }}
-  #  - {{ .Values.ingress.sonarqube.host }}   
+    - {{ .Values.ingress.app.host }}   
     
     secretName: {{ .Values.ingress.secretName }}
   rules:
@@ -25,14 +24,5 @@ spec:
                 port: 
                   number: {{ .Values.ingress.app.port.number }}  
 
-  # - host: {{ .Values.ingress.sonarqube.host }}
-  #   http:
-  #       paths:
-  #         - pathType: {{ .Values.ingress.sonarqube.pathType }}
-  #           path: {{ .Values.ingress.sonarqube.path }}
-  #           backend:
-  #             service:
-  #               name: {{ .Values.ingress.sonarqube.name }}
-  #               port: 
-  #                 number: {{ .Values.ingress.sonarqube.port.number }}   
+ 
    
