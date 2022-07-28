@@ -86,6 +86,7 @@ build-wagtail-stage:
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
       --destination "gcr.io/internship87task8/wagtail:latest"
+   needs: [sonar-scan-stage]   
 
 deploy-stage:
   stage: deploy-stage
@@ -93,12 +94,15 @@ deploy-stage:
   script:
     - cd helmcharts
     - helm upgrade --install wagtail-chart app_helmChart -n dev    
+  needs: [build-wagtail-stage]
+
 
 health-wagtail-stage:
   stage: test-stage
   image: wbitt/network-multitool
   script:
     - nslookup wagtail.prtest.tech
+  [deploy-stage]  
 
 deploy-production:
   stage: deploy-production
