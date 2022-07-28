@@ -86,7 +86,7 @@ build-wagtail-stage:
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
       --destination "gcr.io/internship87task8/wagtail:latest"
-   needs: [sonar-scan-stage]   
+  needs: [sonar-scan-stage]   
 
 deploy-stage:
   stage: deploy-stage
