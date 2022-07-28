@@ -3,6 +3,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 stages:
+  - Trigger-second-pipline
   - sonar-scan-dev
   - build-dev
   - deploy-dev
@@ -12,7 +13,11 @@ stages:
   - deploy-stage
   - test-stage
   - deploy-production
-  
+
+second-pipline:
+  stage: Trigger-second-pipline
+  trigger: application/mysite
+
 sonar-scan-dev:
   stage: sonar-scan-dev
   tags:
