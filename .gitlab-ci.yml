@@ -4,9 +4,10 @@ workflow:
 
 stages:
   - sonar-scan
-  - build
+  #- build
   - deploy
   - test
+  - health
   
 sonarqube-check:
   stage: sonar-scan
@@ -40,8 +41,17 @@ health-wagtail:
   script:
     - nslookup wagtail.prtest.tech
 
+health-wagtail-test:
+  stage: health
+  image: wbitt/network-multitool
+  script:
+    - nslookup wagtail.prtest.tech
        
 
 #include: 'myapp/.buildapp-ci.yml'
 #include: 'backup/.build-image-ci.yml'
-include: 'application/mysite/.build-dev.yml'
+#include: 'application/mysite/.build-dev.yml'
+#include: 'application/mysite/.build-stage.yml'
+#include: 'application/mysite/.build-production.yml'
+
+
