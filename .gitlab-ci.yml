@@ -48,7 +48,7 @@ deploy-dev:
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
-    - helm upgrade --install dev-app app_helmChart -n dev    
+    - helm upgrade --install app-dev app_helmChart -n dev    
 
 health-wagtail-dev:
   stage: test-dev
@@ -93,7 +93,7 @@ deploy-stage:
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
-    - helm upgrade --install stage-app app_helmChart -n stage    
+    - helm upgrade --install app-stage app_helmChart -n stage    
   needs: [build-wagtail-stage]
 
 
@@ -109,7 +109,7 @@ deploy-production:
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
-    - helm upgrade --install production-app app_helmChart -n production    
+    - helm upgrade --install app-production app_helmChart -n production    
   when: manual
 
 
