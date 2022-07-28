@@ -39,7 +39,7 @@ ingress:
   name: main-ingress  
   secretName: app-tls      
   app:
-    host: dev.prtest.tech          
+    host: production.prtest.tech          
     pathType: Prefix
     path: /              
     name: autoscaling-pod-service
