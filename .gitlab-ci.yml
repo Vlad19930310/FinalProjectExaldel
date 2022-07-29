@@ -56,9 +56,9 @@ build-wagtail-check:
 #     - if: $CI_COMMIT_REF_NAME == "main"
 #       variables:
 #         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"     
-  script:
-    - sonar-scanner
-  allow_failure: true
+#   script:
+#     - sonar-scanner
+#   allow_failure: true
 
 build-wagtail-dev:
   stage: build
