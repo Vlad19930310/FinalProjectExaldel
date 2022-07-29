@@ -36,7 +36,7 @@ build-wagtail-check:
       /kaniko/executor
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
-      
+      --no-push 
       
 sonar-scan-dev:
   stage: sonar-scan
