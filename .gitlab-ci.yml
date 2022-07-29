@@ -7,6 +7,7 @@ stages:
   - build
   - deploy
   - test
+  - deploy-prod
 
 #   sonar-scan-merge:
 #   stage: sonar-scan
@@ -178,7 +179,7 @@ health-wagtail-stage:
     
 
 deploy-production:
-  stage: deploy
+  stage: deploy-prod
   needs: ["health-wagtail-stage"] 
   image: alpine/helm:3.9.1
   rules:
