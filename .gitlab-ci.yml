@@ -85,7 +85,7 @@ deploy-dev:
         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev" 
   script:
     - cd helmcharts
-    - helm upgrade --install app-dev app_helmChart -n dev    
+    - helm upgrade --install app-dev app-dev-helmChart -n dev    
 
 health-wagtail-dev:
   stage: test
@@ -150,7 +150,7 @@ deploy-stage:
         IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
-    - helm upgrade --install app-stage app_helmChart -n stage    
+    - helm upgrade --install app-stage app-stage-helmChart -n stage    
   
 
 
@@ -180,7 +180,7 @@ deploy-production:
         IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
-    - helm upgrade --install app-production app_helmChart -n production
+    - helm upgrade --install app-production app-prod-helmChart -n production
        
   when: manual
 
