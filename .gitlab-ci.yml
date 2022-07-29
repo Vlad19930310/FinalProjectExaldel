@@ -1,19 +1,14 @@
 workflow:
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  # rules:
+  #   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 stages:
   - sonar-scan-dev
-  - build-dev
-  - deploy-dev
-  - test-dev
-  - sonar-scan-stage
-  - build-stage
-  - deploy-stage
-  - test-stage
-  - deploy-production
+  - build
+  - deploy
+  - test
   
-sonar-scan-dev:
+sonar-scan-merge:
   stage: sonar-scan-dev
   tags:
 #    - docker
@@ -31,11 +26,48 @@ sonar-scan-dev:
     - sonar-scanner
   allow_failure: true
 
+build-wagtail-check:
+  stage: build-dev
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - >-
+      /kaniko/executor
+      --context "application/mysite"
+      --dockerfile "application/mysite/Dockerfile"
+      
+sonar-scan-dev:
+  stage: sonar-scan-dev
+  tags:
+#    - docker
+  image:
+    name: sonarsource/sonar-scanner-cli:latest
+    entrypoint: [""]
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"     
+  script:
+    - sonar-scanner
+  allow_failure: true
+
 build-wagtail-dev:
   stage: build-dev
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"      
   script:
     - >-
       /kaniko/executor
@@ -46,6 +78,10 @@ build-wagtail-dev:
 deploy-dev:
   stage: deploy-dev
   image: alpine/helm:3.9.1
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev" 
   script:
     - cd helmcharts
     - helm upgrade --install app-dev app_helmChart -n dev    
@@ -53,6 +89,10 @@ deploy-dev:
 health-wagtail-dev:
   stage: test-dev
   image: wbitt/network-multitool
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev" 
   script:
     - nslookup dev.prtest.tech
       
@@ -70,43 +110,78 @@ sonar-scan-stage:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+    - if: $CI_COMMIT_TAG
+      variables:
+        IMAGE_TAG: $CI_COMMIT_TAG        
   script:
     - sonar-scanner
   allow_failure: true
-  when: manual
+  
 
 build-wagtail-stage:
   stage: build-stage
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+    - if: $CI_COMMIT_TAG
+      variables:
+        IMAGE_TAG: $CI_COMMIT_TAG   
   script:
     - >-
       /kaniko/executor
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
       --destination "gcr.io/internship87task8/wagtail:latest"
-  needs: [sonar-scan-stage]   
+    
 
 deploy-stage:
   stage: deploy-stage
   image: alpine/helm:3.9.1
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+    - if: $CI_COMMIT_TAG
+      variables:
+        IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
     - helm upgrade --install app-stage app_helmChart -n stage    
-  needs: [build-wagtail-stage]
+  
 
 
 health-wagtail-stage:
   stage: test-stage
   image: wbitt/network-multitool
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+    - if: $CI_COMMIT_TAG
+      variables:
+        IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - nslookup stage.prtest.tech
-  needs: [deploy-stage]  
+    
 
 deploy-production:
   stage: deploy-production
   image: alpine/helm:3.9.1
+  rules:
+    - if: $CI_COMMIT_REF_NAME == "main"
+      variables:
+        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+    - if: $CI_COMMIT_TAG
+      variables:
+        IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
     - helm upgrade --install app-production app_helmChart -n production    
