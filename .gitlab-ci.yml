@@ -189,7 +189,8 @@ deploy-production:
         IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
-    - helm upgrade --install app-production app_helmChart -n production    
+    - helm upgrade --install app-production app_helmChart -n production
+  needs: [health-wagtail-stage]      
   when: manual
 
 
