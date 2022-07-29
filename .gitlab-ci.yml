@@ -55,6 +55,7 @@ health-wagtail-dev:
   image: wbitt/network-multitool
   script:
     - nslookup dev.prtest.tech
+    - curl https://dev.prtest.tech
       
 sonar-scan-stage:
   stage: sonar-scan-stage
@@ -102,6 +103,7 @@ health-wagtail-stage:
   image: wbitt/network-multitool
   script:
     - nslookup stage.prtest.tech
+    - curl https://stage.prtest.tech
   needs: [deploy-stage]  
 
 deploy-production:
