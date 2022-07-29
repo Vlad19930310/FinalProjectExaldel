@@ -7,9 +7,7 @@ stages:
   - deploy-prod
 
 sonar-scan-merge:
-  stage: sonar-scan
-  tags:
-#    - docker
+  stage: sonar-scan  
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
