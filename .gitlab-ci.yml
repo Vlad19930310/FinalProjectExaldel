@@ -95,6 +95,7 @@ health-wagtail-dev:
         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev" 
   script:
     - nslookup dev.prtest.tech
+    - curl https://dev.prtest.tech
       
 sonar-scan-stage:
   stage: sonar-scan-stage
