@@ -7,24 +7,24 @@ stages:
   - build
   - deploy
   - test
-  
-sonar-scan-merge:
-  stage: sonar-scan
-  tags:
-#    - docker
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  script:
-    - sonar-scanner
-  allow_failure: true
+
+#   sonar-scan-merge:
+#   stage: sonar-scan
+#   tags:
+# #    - docker
+#   image:
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   variables:
+#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+#     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+#   cache:
+#     key: "${CI_JOB_NAME}"
+#     paths:
+#       - .sonar/cache
+#   script:
+#     - sonar-scanner
+#   allow_failure: true
 
 build-wagtail-check:
   stage: build
@@ -38,24 +38,24 @@ build-wagtail-check:
       --dockerfile "application/mysite/Dockerfile"
       --no-push 
       
-sonar-scan-dev:
-  stage: sonar-scan
-  tags:
-#    - docker
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
-      variables:
-        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"     
+# sonar-scan-dev:
+#   stage: sonar-scan
+#   tags:
+# #    - docker
+#   image:
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   variables:
+#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+#     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+#   cache:
+#     key: "${CI_JOB_NAME}"
+#     paths:
+#       - .sonar/cache
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME == "main"
+#       variables:
+#         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"     
   script:
     - sonar-scanner
   allow_failure: true
@@ -97,30 +97,30 @@ health-wagtail-dev:
   script:
     - nslookup dev.prtest.tech
       
-sonar-scan-stage:
-  stage: sonar-scan
-  tags:
-#    - docker
-  image:
-    name: sonarsource/sonar-scanner-cli:latest
-    entrypoint: [""]
-  variables:
-    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .sonar/cache
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
-      variables:
-        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
-    - if: $CI_COMMIT_TAG
-      variables:
-        IMAGE_TAG: $CI_COMMIT_TAG        
-  script:
-    - sonar-scanner
-  allow_failure: true
+# sonar-scan-stage:
+#   stage: sonar-scan
+#   tags:
+# #    - docker
+#   image:
+#     name: sonarsource/sonar-scanner-cli:latest
+#     entrypoint: [""]
+#   variables:
+#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+#     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+#   cache:
+#     key: "${CI_JOB_NAME}"
+#     paths:
+#       - .sonar/cache
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME == "main"
+#       variables:
+#         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+#     - if: $CI_COMMIT_TAG
+#       variables:
+#         IMAGE_TAG: $CI_COMMIT_TAG        
+#   script:
+#     - sonar-scanner
+#   allow_failure: true
   
 
 build-wagtail-stage:
