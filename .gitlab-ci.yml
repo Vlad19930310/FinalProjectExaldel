@@ -1,6 +1,6 @@
 workflow:
-  ## rules:
-  ##   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  #№# rules:
+  ##№   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 stages:
   - sonar-scan
@@ -58,9 +58,7 @@ sonar-scan-dev:
     paths:
       - .sonar/cache
   rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
-      variables:
-        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"     
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH         
   script:
     - sonar-scanner
   allow_failure: true
@@ -96,9 +94,7 @@ health-wagtail-dev:
   stage: test
   image: wbitt/network-multitool
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      variables:
-        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev" 
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH      
   script:
     - nslookup dev.prtest.tech
     - curl https://dev.prtest.tech
@@ -117,10 +113,7 @@ sonar-scan-stage:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  rules:
-    - if: $CI_COMMIT_REF_NAME == "main"
-      variables:
-        IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+  rules:    
     - if: $CI_COMMIT_TAG
       variables:
         IMAGE_TAG: $CI_COMMIT_TAG        
