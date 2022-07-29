@@ -179,6 +179,7 @@ health-wagtail-stage:
 
 deploy-production:
   stage: deploy
+  needs: ["health-wagtail-stage"] 
   image: alpine/helm:3.9.1
   rules:
     # - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
@@ -190,7 +191,7 @@ deploy-production:
   script:
     - cd helmcharts
     - helm upgrade --install app-production app_helmChart -n production
-  needs: ["health-wagtail-stage"]      
+       
   when: manual
 
 
