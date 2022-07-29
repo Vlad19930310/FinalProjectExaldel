@@ -3,13 +3,13 @@ workflow:
   #   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 stages:
-  - sonar-scan-dev
+  - sonar-scan
   - build
   - deploy
   - test
   
 sonar-scan-merge:
-  stage: sonar-scan-dev
+  stage: sonar-scan
   tags:
 #    - docker
   image:
@@ -27,7 +27,7 @@ sonar-scan-merge:
   allow_failure: true
 
 build-wagtail-check:
-  stage: build-dev
+  stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -38,7 +38,7 @@ build-wagtail-check:
       --dockerfile "application/mysite/Dockerfile"
       
 sonar-scan-dev:
-  stage: sonar-scan-dev
+  stage: sonar-scan
   tags:
 #    - docker
   image:
@@ -60,7 +60,7 @@ sonar-scan-dev:
   allow_failure: true
 
 build-wagtail-dev:
-  stage: build-dev
+  stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -76,7 +76,7 @@ build-wagtail-dev:
       --destination "gcr.io/internship87task8/wagtail:latest"
 
 deploy-dev:
-  stage: deploy-dev
+  stage: deploy
   image: alpine/helm:3.9.1
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
@@ -87,7 +87,7 @@ deploy-dev:
     - helm upgrade --install app-dev app_helmChart -n dev    
 
 health-wagtail-dev:
-  stage: test-dev
+  stage: test
   image: wbitt/network-multitool
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
@@ -97,7 +97,7 @@ health-wagtail-dev:
     - nslookup dev.prtest.tech
       
 sonar-scan-stage:
-  stage: sonar-scan-stage
+  stage: sonar-scan
   tags:
 #    - docker
   image:
@@ -123,7 +123,7 @@ sonar-scan-stage:
   
 
 build-wagtail-stage:
-  stage: build-stage
+  stage: build
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
@@ -143,7 +143,7 @@ build-wagtail-stage:
     
 
 deploy-stage:
-  stage: deploy-stage
+  stage: deploy
   image: alpine/helm:3.9.1
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
@@ -159,7 +159,7 @@ deploy-stage:
 
 
 health-wagtail-stage:
-  stage: test-stage
+  stage: test
   image: wbitt/network-multitool
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
@@ -173,7 +173,7 @@ health-wagtail-stage:
     
 
 deploy-production:
-  stage: deploy-production
+  stage: deploy
   image: alpine/helm:3.9.1
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
