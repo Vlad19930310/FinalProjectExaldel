@@ -190,7 +190,7 @@ deploy-production:
   script:
     - cd helmcharts
     - helm upgrade --install app-production app_helmChart -n production
-  needs: [health-wagtail-stage]      
+  needs: ["health-wagtail-stage"]      
   when: manual
 
 
