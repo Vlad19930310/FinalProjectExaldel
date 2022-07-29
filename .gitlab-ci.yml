@@ -180,8 +180,7 @@ health-wagtail-stage:
     
 
 deploy-production:
-  stage: deploy-prod
-  needs: ["health-wagtail-stage"] 
+  stage: deploy-prod  
   image: alpine/helm:3.9.1
   rules:
     # - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
