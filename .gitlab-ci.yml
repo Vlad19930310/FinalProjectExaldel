@@ -9,7 +9,7 @@ stages:
   - test
   - deploy-prod
 
-  sonar-scan-merge:
+sonar-scan-merge:
   stage: sonar-scan
   tags:
 #    - docker
