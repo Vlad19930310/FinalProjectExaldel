@@ -150,7 +150,7 @@ deploy-stage:
         IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
-    - helm upgrade --install app-stage app-stage-helmChart -n stage    
+    - helm upgrade --install app-stage app-stage-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG -n stage    
   
 
 
