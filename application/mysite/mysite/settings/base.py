@@ -91,7 +91,7 @@ DATABASES = {
         'USER': os.environ["USERNAME"],
         'PASSWORD': os.environ["PASSWORD"],
         'HOST': '10.72.2.244',
-        'PORT': os.environ["PORT"],
+        'PORT': '5432',
     }
 }
 
