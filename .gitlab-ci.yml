@@ -67,21 +67,11 @@ build-wagtail-dev:
       variables:
         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"      
   script: 
-    - mkdir -p /kaniko/.docker
-    - |-
-       KANIKOPROXYBUILDARGS=""
-       KANIKOCFG="\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}"
-       if [ "x${http_proxy}" != "x" -o "x${https_proxy}" != "x" ]; then
-         KANIKOCFG="${KANIKOCFG}, \"proxies\": { \"default\": { \"httpProxy\": \"${http_proxy}\", \"httpsProxy\": \"${https_proxy}\", \"noProxy\": \"${no_proxy}\"}}"
-         KANIKOPROXYBUILDARGS="--build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg no_proxy=${no_proxy}"
-       fi
-       KANIKOCFG="{ ${KANIKOCFG} }"
-       echo "${KANIKOCFG}" > /kaniko/.docker/config.json
     - >-
       /kaniko/executor
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
-      --destination "gcr.io/internship87task8/${CI_COMMIT_TAG}"
+      --destination "gcr.io/internship87task8/wagtail:$IMAGE_TAG"
 
 deploy-dev:
   stage: deploy
