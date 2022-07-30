@@ -72,7 +72,7 @@ build-wagtail-dev:
       /kaniko/executor
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
-      --destination "gcr.io/internship87task8/wagtail:$v"
+      --destination "gcr.io/internship87task8/wagtail:$IMAGE_TAG"
 
 deploy-dev:
   stage: deploy
@@ -83,7 +83,7 @@ deploy-dev:
         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev" 
   script:
     - cd helmcharts
-    - helm upgrade --install app-dev app-dev-helmChart -n dev    
+    - helm upgrade --install app-dev app-dev-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG -n dev    
 
 health-wagtail-dev:
   stage: test
@@ -179,7 +179,7 @@ deploy-production:
         IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
-    - helm upgrade --install app-production app-prod-helmChart -n production
+    - helm upgrade --install app-production app-prod-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG -n production
        
   when: manual
 
