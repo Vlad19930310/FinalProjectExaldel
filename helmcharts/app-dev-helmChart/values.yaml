@@ -59,27 +59,6 @@ containers:
     image: gcr.io/internship87task8/wagtail:latest
     ports:
       containerPort: 8000
-    env:
-    - name: USERNAME
-      valueFrom:
-        secretKeyRef:
-          name: my-secret
-          key: pgusername
-    - name: PASSWORD
-      valueFrom:
-        secretKeyRef:
-          name: my-secret
-          key: pgpassword
-    - name: HOST
-      valueFrom:
-        secretKeyRef:
-          name: my-secret
-          key: pghost          
-    - name: PORT
-      valueFrom:
-        secretKeyRef:
-           name: my-secret
-           key: pgport
 
 prod_Clusterissuer:
   apiVersion: cert-manager.io/v1
