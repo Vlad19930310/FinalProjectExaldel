@@ -66,8 +66,7 @@ build-wagtail-dev:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"      
-  script:
-    - v=1 
+  script: 
     - >-
       /kaniko/executor
       --context "application/mysite"
@@ -92,7 +91,7 @@ health-wagtail-dev:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH      
   script:
     - nslookup dev.prtest.tech
-    - curl https://dev.prtest.tech
+    - curl http://dev.prtest.tech
       
 sonar-scan-stage:
   stage: sonar-scan
