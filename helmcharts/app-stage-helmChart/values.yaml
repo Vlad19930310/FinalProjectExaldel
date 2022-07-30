@@ -56,7 +56,7 @@ ingress:
 containers:
   app:
     name : app-wagtail
-    image: gcr.io/internship87task8/wagtail:${{ IMAGE_TAG }}
+    image: gcr.io/internship87task8/wagtail:latest
     ports:
       containerPort: 8000
     env:
