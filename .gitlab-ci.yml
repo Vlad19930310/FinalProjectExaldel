@@ -72,7 +72,7 @@ build-wagtail-dev:
       /kaniko/executor
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
-      --destination "gcr.io/internship87task8/wagtail:$v"
+      --destination "gcr.io/internship87task8/wagtail:$tag"
 
 deploy-dev:
   stage: deploy
