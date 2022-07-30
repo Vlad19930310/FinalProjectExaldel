@@ -149,7 +149,7 @@ deploy-stage:
         IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
-    - helm upgrade --install --set .Values.containers.app.name=$IMAGE_TAG  app-stage app-stage-helmChart -n stage    
+    - helm upgrade --install app-stage app-stage-helmChart -n stage    
   
 
 
