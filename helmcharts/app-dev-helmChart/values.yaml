@@ -63,13 +63,23 @@ containers:
     - name: USERNAME
       valueFrom:
         secretKeyRef:
-          name: mysecret
-          key: username
+          name: my-secret
+          key: pgusername
     - name: PASSWORD
       valueFrom:
         secretKeyRef:
-           name: mysecret
-           key: password
+          name: my-secret
+          key: pgpassword
+    - name: HOST
+      valueFrom:
+        secretKeyRef:
+          name: my-secret
+          key: pghost          
+    - name: PORT
+      valueFrom:
+        secretKeyRef:
+           name: my-secret
+           key: pgport
 
 prod_Clusterissuer:
   apiVersion: cert-manager.io/v1
