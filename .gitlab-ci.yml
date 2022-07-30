@@ -76,6 +76,8 @@ build-wagtail-dev:
 deploy-dev:
   stage: deploy
   image: alpine/helm:3.9.1
+  variables: 
+    TAG: "$tag"
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
