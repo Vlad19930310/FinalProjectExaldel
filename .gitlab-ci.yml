@@ -67,8 +67,8 @@ build-wagtail-dev:
       variables:
         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"      
   script:
+    - declare -i v+=1 
     - >-
-      declare -i v+=1 \
       /kaniko/executor
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
