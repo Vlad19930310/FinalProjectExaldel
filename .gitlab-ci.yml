@@ -71,7 +71,7 @@ build-wagtail-dev:
       /kaniko/executor
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
-      --destination "gcr.io/internship87task8/wagtail:latest"
+      --destination "gcr.io/internship87task8/${CI_COMMIT_TAG}"
 
 deploy-dev:
   stage: deploy
