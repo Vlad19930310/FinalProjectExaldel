@@ -161,3 +161,46 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 ### Step 4 ()
 ### Step 5 ()
 
+## Install and setup Sonar Qube
+
+### Step 1 (install Sonar Qube)
+- Install Sonar Qube using Helm Chart:
+```
+install sonar-qube sonarqube-helmChart -n sonarqube
+```
+- After some minutes check sonarqube on it's host. 
+Credentials to log in at the first time:
+login: admin
+password: admin
+
+### Step 2 (integrate Sonar Qube with your Gitlab)
+- Choose Gitlab 
+
+[![Screenshot-from-2022-07-28-21-19-21.png](https://i.postimg.cc/vH26LSrz/Screenshot-from-2022-07-28-21-19-21.png)](https://postimg.cc/6yR3Bc12)
+
+- Choose your Gitlab project 
+
+[![Screenshot-from-2022-07-28-21-25-34.png](https://i.postimg.cc/KvTRBvYZ/Screenshot-from-2022-07-28-21-25-34.png)](https://postimg.cc/HVpYCm5K)
+ 
+- choose your CI tool 
+
+[![Screenshot-from-2022-07-28-21-25-50.png](https://i.postimg.cc/bYD0JtKr/Screenshot-from-2022-07-28-21-25-50.png)](https://postimg.cc/23YL9VjN)
+
+- choose technology of your project and copy generated code
+
+- create file sonar-project.properties and past there your code
+
+- go to Settings-CI/CD-Variables in Gitlab and add the next variables:
+
+[![Screenshot-from-2022-07-28-21-27-54.png](https://i.postimg.cc/vHSc6qfd/Screenshot-from-2022-07-28-21-27-54.png)](https://postimg.cc/9rZW6BLx)
+
+[![Screenshot-from-2022-07-28-21-28-35.png](https://i.postimg.cc/c4NNkQW8/Screenshot-from-2022-07-28-21-28-35.png)](https://postimg.cc/Yj8VhLhp)
+ 
+ [![Screenshot-from-2022-07-28-21-28-45.png](https://i.postimg.cc/ryNhcWW4/Screenshot-from-2022-07-28-21-28-45.png)](https://postimg.cc/233d710j)
+
+ - update your ci configuration file
+
+ [![Screenshot-from-2022-07-28-21-29-48.png](https://i.postimg.cc/s2f01CG3/Screenshot-from-2022-07-28-21-29-48.png)](https://postimg.cc/75cNQcNR)
+
+ 
+
