@@ -19,6 +19,36 @@
 поставить докер, google cli, helm3, kubectl, git, vscode 
 
 
+- Download and install the gcloud command line tool at its [install page](https://cloud.google.com/sdk/docs/install). It will help you create and communicate with a Kubernetes cluster. 
+- Install kubectl (reads kube control), it is a tool for controlling Kubernetes clusters in general. From your terminal, enter:  
+```
+sudo apt install kubectl
+```
+### Step 2 (setup cluster by the next commands):
+```
+gcloud services enable container.googleapis.com 
+gcloud container clusters create CLUSTER_NAME --enable-autoscaling --num-nodes 2 --min-nodes 2 --max-nodes 5 --region=europe-central2-a
+```
+- Connect to your cluster:
+```
+gcloud container clusters get-credentials kuber 
+``` 
+- Add another node pool. It will be used to setup monitoring and logging tools.
+```
+gcloud container node-pools create pool-1 --cluster=kuber --enable-autoscaling --min-nodes=2 --max-nodes=5 --machine-type e2-standard-4 --region=europe-central2-a
+```
+#### As a result we have a cluster with 2 node pools, with 2 nodes and Autoscalling in everyone:  
+[![Screenshot-from-2022-08-01-16-39-47.png](https://i.postimg.cc/15HCkLwZ/Screenshot-from-2022-08-01-16-39-47.png)](https://postimg.cc/jLD4N3M8)
+
+
+## Initial cluster setting 
+
+#### Based on the planned infrastructure of the project we need 1 domain and 4 subdomains with SSL Certificate. 
+
+### Step 1 (registrate domain with subdomains)
+
+
+
 
 ## Configure CI/CD (Raman Pitselmakhau)
 ### Step 1 (create account and project)
