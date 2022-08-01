@@ -38,9 +38,7 @@ build-wagtail-check:
       --no-push 
       
 sonar-scan-dev:
-  stage: sonar-scan
-  tags:
-#    - docker
+  stage: sonar-scan  
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -96,9 +94,7 @@ health-wagtail-dev:
     - curl https://dev.prtest.tech
       
 sonar-scan-stage:
-  stage: sonar-scan
-  tags:
-#    - docker
+  stage: sonar-scan  
   image:
     name: sonarsource/sonar-scanner-cli:latest
     entrypoint: [""]
@@ -123,10 +119,7 @@ build-wagtail-stage:
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
-  rules:
-    # - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    #   variables:
-    #    IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+  rules:    
     - if: $CI_COMMIT_TAG
       variables:
         IMAGE_TAG: $CI_COMMIT_TAG   
@@ -141,10 +134,7 @@ build-wagtail-stage:
 deploy-stage:
   stage: deploy
   image: alpine/helm:3.9.1
-  rules:
-    # - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    #   variables:
-    #     IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+  rules:    
     - if: $CI_COMMIT_TAG
       variables:
         IMAGE_TAG: $CI_COMMIT_TAG 
@@ -157,10 +147,7 @@ deploy-stage:
 health-wagtail-stage:
   stage: test
   image: wbitt/network-multitool
-  rules:
-    # - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    #   variables:
-    #     IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+  rules:    
     - if: $CI_COMMIT_TAG
       variables:
         IMAGE_TAG: $CI_COMMIT_TAG 
@@ -172,17 +159,13 @@ health-wagtail-stage:
 deploy-production:
   stage: deploy-prod  
   image: alpine/helm:3.9.1
-  rules:
-    # - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    #   variables:
-    #     IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev"
+  rules:    
     - if: $CI_COMMIT_TAG
       variables:
         IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
-    - helm upgrade --install app-prod app-prod-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG -n prod
-       
+    - helm upgrade --install app-prod app-prod-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG -n prod       
   when: manual
 
 
