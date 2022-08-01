@@ -19,8 +19,6 @@
 поставить докер, google cli, helm3, kubectl, git, vscode 
 
 
-## Setup k8s cluster in GCP
-### Step 1 (install gclooud CLI and kubectl) 
 - Download and install the gcloud command line tool at its [install page](https://cloud.google.com/sdk/docs/install). It will help you create and communicate with a Kubernetes cluster. 
 - Install kubectl (reads kube control), it is a tool for controlling Kubernetes clusters in general. From your terminal, enter:  
 ```
@@ -43,7 +41,11 @@ gcloud container node-pools create pool-1 --cluster=kuber --enable-autoscaling -
 [![Screenshot-from-2022-08-01-16-39-47.png](https://i.postimg.cc/15HCkLwZ/Screenshot-from-2022-08-01-16-39-47.png)](https://postimg.cc/jLD4N3M8)
 
 
+## Initial cluster setting 
 
+#### Based on the planned infrastructure of the project we need 1 domain and 4 subdomains with SSL Certificate. 
+
+### Step 1 (registrate domain with subdomains)
 
 
 
