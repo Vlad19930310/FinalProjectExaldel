@@ -71,16 +71,7 @@ containers:
             name: mysecret
             key: password
 
-prod_Clusterissuer:
-  apiVersion: cert-manager.io/v1
-  name: letsencrypt-prod
-  email: yury.market.ma@gmail.com
-  server: https://acme-v02.api.letsencrypt.org/directory
-  privateKeySecretRef:
-    # Secret resource that will be used to store the ACME account's private key.
-    name: letsencrypt-prod-private-key
-      # Add a single challenge solver, HTTP01 using nginx
-  class: nginx
+
 
 
 
