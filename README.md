@@ -44,9 +44,37 @@ gcloud container node-pools create pool-1 --cluster=kuber --enable-autoscaling -
 [![Screenshot-from-2022-08-01-16-39-47.png](https://i.postimg.cc/15HCkLwZ/Screenshot-from-2022-08-01-16-39-47.png)](https://postimg.cc/jLD4N3M8)
 
 
+## Initial cluster setting 
+
+### Step 1 (deploy the ingress controller)
+- deploy the ingress controller and other recources we need with the following command:
+```
+#create namespace ngress-nginx and deploy in it ingress-controller and
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
+```
+- get your external ip by the command:
+```
+kubectl get svc -n ingress-nginx
+```
+[![Screenshot-from-2022-08-01-19-13-32.png](https://i.postimg.cc/Znxcn1wr/Screenshot-from-2022-08-01-19-13-32.png)](https://postimg.cc/4HntFFkd)
+
+### Step 2 (registration domain and subdomains)
+- Registrate domain with subdomains and create DNS A-records with your external IP in any service:
+[![Screenshot-from-2022-08-01-22-37-43.png](https://i.postimg.cc/CxtvKc9d/Screenshot-from-2022-08-01-22-37-43.png)](https://postimg.cc/VJq9GWfc)
 
 
-
+### Step 3 (install all cert-manager) 
+- Install all cert-manager components:
+```
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml
+```
+### Step 4 (install Cluster Issuer)
+- Isntall Cluster Issuer from Helm Chart in namespace ingress-nginx/ Don't forget to change field 'e-mail':
+```
+helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
+```
+### Step 5 (add information in ingresses)
+- Add information in every ingress file
 
 
 ## Configure CI/CD (Raman Pitselmakhau)
