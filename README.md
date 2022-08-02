@@ -176,17 +176,20 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 - psycopg2 driver for working with postrgresql
 - gunicorn converting requests received from Nginx into a format that your web application can use, and executing code as needed.
 8. pip install -r requirements.txt
+- requirements.txt store information about: python version, Django, wagtail, psycopg2-binary, gunicorn
 9. Docker must be installed on system
 10. Configure ```Dockerfile``` with your configuration
 11. Buld image ```docker build -t wagtail .``` in root derictory of project
-13. Test your image
-14. run Postgresql image with parametrs ```docker run --name <future name your conteiner> -e POSTGRES_PASSWORD=<your password> -d -p 5432:5432 postgres
-15. Run container from your builded image with wagtaill app
-16. Testing image on local machine
-17. Push Dockerfile and all dependeces in git repo
-18. For deploying application Database pod must be installed.
-19. For configuring type of Database and connection setting you can modify ```base.py``` in ```mysite/settings``` GcpFilestoreCsiDriver
-20. For securing connection to Database using Gitlab secret, and kubectl secret.  
+12. Run Postgresql image with parametrs: 
+- ```docker run --name <future name your conteiner>``` \ 
+- ```-e POSTGRES_PASSWORD=<your password> -d -p 5432:5432 postgres```
+13. Testing application and pushing to docker hub
+14. Run container from your builded image with wagtaill app
+15. Testing image on local machine
+16. Push Dockerfile and all dependeces in git repo
+17. For deploying application Database container in pod must be installed.
+18. For configuring type of Database and connection setting you can modify ```base.py``` in ```mysite/settings``` 
+19. For securing connection to Database using Gitlab secret, and kubectl secret.  
 
 ### Step 4 ()
 ### Step 5 ()
