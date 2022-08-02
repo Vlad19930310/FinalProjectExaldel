@@ -4,6 +4,9 @@ stages:
   - deploy
   - test
   - deploy-prod
+  
+variables:
+  PACKAGE_NAME: "awesome-django-app"
 
 sonar-scan-merge:
   stage: sonar-scan  
