@@ -168,10 +168,13 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 # Install wagtail  
 1. Update system  ```apt-get update``` verify installed python  
 2. Install pip ```python get-pip.py```
+- pip package manager for python application 
 3. Install wagtail ```pip install wagtail```
 4. wagtail start mysite
 6. cd mysite
 7. add to ```requirements.txt``` strings ```psycopg2-binary>=2.8<2.9``` ```gunicorn==20.0.4```
+- psycopg2 driver for working with postrgresql
+- gunicorn converting requests received from Nginx into a format that your web application can use, and executing code as needed.
 8. pip install -r requirements.txt
 9. Docker must be installed on system
 10. Configure ```Dockerfile``` with your configuration
