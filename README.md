@@ -19,7 +19,9 @@
 поставить докер, google cli, helm3, kubectl, git, vscode 
 
 
+
 ## Setup k8s cluster in GCP
+
 ### Step 1 (install gclooud CLI and kubectl) 
 
 - Download and install the gcloud command line tool at its [install page](https://cloud.google.com/sdk/docs/install). It will help you create and communicate with a Kubernetes cluster. 
@@ -44,6 +46,7 @@ gcloud container node-pools create pool-1 --cluster=kuber --enable-autoscaling -
 [![Screenshot-from-2022-08-01-16-39-47.png](https://i.postimg.cc/15HCkLwZ/Screenshot-from-2022-08-01-16-39-47.png)](https://postimg.cc/jLD4N3M8)
 
 
+
 ## Initial cluster setting 
 
 ### Step 1 (deploy the ingress controller)
@@ -58,6 +61,7 @@ kubectl get svc -n ingress-nginx
 ```
 [![Screenshot-from-2022-08-01-19-13-32.png](https://i.postimg.cc/Znxcn1wr/Screenshot-from-2022-08-01-19-13-32.png)](https://postimg.cc/4HntFFkd)
 
+
 ### Step 2 (registration domain and subdomains)
 - Registrate domain with subdomains and create DNS A-records with your external IP in any service:
 [![Screenshot-from-2022-08-01-22-37-43.png](https://i.postimg.cc/CxtvKc9d/Screenshot-from-2022-08-01-22-37-43.png)](https://postimg.cc/VJq9GWfc)
@@ -68,13 +72,16 @@ kubectl get svc -n ingress-nginx
 ```
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml
 ```
+
 ### Step 4 (install Cluster Issuer)
 - Isntall Cluster Issuer from Helm Chart in namespace ingress-nginx/ Don't forget to change field 'e-mail':
 ```
 helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 ```
+
 ### Step 5 (add information in ingresses)
 - Add information in every ingress file
+
 
 
 ## Configure CI/CD (Raman Pitselmakhau)
@@ -162,6 +169,7 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 ### Step 5 ()
 
 
+
 ## Setup application from Helm Chart
 
 ### Step 1 (create namespaces)
@@ -179,11 +187,6 @@ helm install app-stage app-helmChart --set ingress.app.host=stage.prtest.tech -n
 helm install app-prod app-helmChart --set ingress.app.host=prtest.tech -n prod
 ```
 
-
-
-### Step 1 (first installation)
-
-- At the first time install application in 
 
 ## Install and setup Sonar Qube
 
