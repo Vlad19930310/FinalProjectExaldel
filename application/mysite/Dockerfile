@@ -13,10 +13,7 @@ EXPOSE 8000
 #    command.
 ENV PYTHONUNBUFFERED=1 \
     PORT=8000 \
-    USERNAME=wagtail \
-    PASSWORD=MWYyZDFlMmU2N2Rm \
-    CI_JOB_NAME=$CI_JOB_NAME
-
+  
 # Install system packages required by Wagtail and Django.
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
     build-essential \
