@@ -22,7 +22,7 @@ spec:
             - name: SECRETUSERNAME 
               valueFrom: 
                 secretKeyRef: 
-                  name: dbsecret
+                  name: dbname
                   key: username 
 
 ---
