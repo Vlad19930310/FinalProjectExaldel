@@ -14,8 +14,7 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED=1 \
     PORT=8000 \
     USERNAME=wagtail \
-    PASSWORD=MWYyZDFlMmU2N2Rm \
-    TAG=123
+    PASSWORD=MWYyZDFlMmU2N2Rm 
 
 # Install system packages required by Wagtail and Django.
 RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
