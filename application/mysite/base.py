@@ -90,7 +90,7 @@ DATABASES = {
         'NAME': 'wagtail',
         'USER': os.environ['DBUSERNAME'],
         'PASSWORD': os.environ['DBPASSWORD'],
-        'HOST': '10.72.2.27',
+        'HOST': '10.72.3.213',
         'PORT': '5432',
     }
 }
