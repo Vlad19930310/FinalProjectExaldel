@@ -1,4 +1,3 @@
-
 apiVersion : {{ .Values.app.apiVersion }}
 kind: Deployment
 metadata:
@@ -19,7 +18,12 @@ spec:
           image: {{ .Values.containers.app.image }}
           ports:
             - containerPort: {{ .Values.containers.app.ports.containerPort }}
-
+          env: 
+            - name: SECRET_USERNAME 
+              valueFrom: 
+                secretKeyRef: 
+                  name: dbsecret 
+                  key: username 
 
 ---
 apiVersion: {{ .Values.HPA.apiVersion }}
