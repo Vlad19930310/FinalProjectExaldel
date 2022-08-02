@@ -49,7 +49,7 @@ gcloud container node-pools create pool-1 --cluster=kuber --enable-autoscaling -
 ### Step 1 (deploy the ingress controller)
 - deploy the ingress controller and other recources we need with the following command:
 ```
-#create namespace ngress-nginx and deploy in it ingress-controller and
+#create namespace ngress-nginx and deploy in it ingress-controller and other recources 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.3.0/deploy/static/provider/cloud/deploy.yaml
 ```
 - get your external ip by the command:
@@ -161,6 +161,30 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 ### Step 4 ()
 ### Step 5 ()
 
+
+## Setup application from Helm Chart
+
+### Step 1 (create namespaces)
+- Create namespaces, which we will use for installation versions of our application by the commands:
+```
+kubectl create namespace dev
+kubectl create namespace stage
+kubectl create namespace prod
+```
+### Step 2(install start versions of application)
+- Install start versiona of application by the next commands:
+```
+helm install app-dev app-helmChart --set igress.app.host=dev.prtest.tech -n dev
+helm install app-stage app-helmChart --set ingress.app.host=stage.prtest.tech -n stage
+helm install app-prod app-helmChart --set ingress.app.host=prtest.tech -n prod
+```
+
+
+
+### Step 1 (first installation)
+
+- At the first time install application in 
+
 ## Install and setup Sonar Qube
 
 ### Step 1 (install Sonar Qube)
@@ -202,5 +226,5 @@ password: admin
 
  [![Screenshot-from-2022-07-28-21-29-48.png](https://i.postimg.cc/s2f01CG3/Screenshot-from-2022-07-28-21-29-48.png)](https://postimg.cc/75cNQcNR)
 
- 
+
 

@@ -82,7 +82,7 @@ deploy-dev:
         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev" 
   script:
     - cd helmcharts
-    - helm upgrade --install app-dev app-dev-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG -n dev    
+    - helm upgrade --install app-dev app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set igress.app.host=dev.prtest.tech -n dev    
 
 health-wagtail-dev:
   stage: test
@@ -140,7 +140,7 @@ deploy-stage:
         IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
-    - helm upgrade --install app-stage app-stage-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG -n stage    
+    - helm upgrade --install app-stage app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set ingress.app.host=stage.prtest.tech -n stage    
   
 
 
@@ -165,7 +165,7 @@ deploy-production:
         IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - cd helmcharts
-    - helm upgrade --install app-prod app-prod-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG -n prod       
+    - helm upgrade --install app-prod app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set ingress.app.host=prtest.tech -n prod       
   when: manual
 
 
