@@ -82,7 +82,7 @@ deploy-dev:
         IMAGE_TAG: "$CI_COMMIT_SHORT_SHA-dev" 
   script:
     - cd helmcharts
-    - helm upgrade --install app-dev app-dev-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG -n dev    
+    - helm upgrade --install app-dev app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set ingress.app.host=dev.prtest.tech -n dev    
 
 health-wagtail-dev:
   stage: test
