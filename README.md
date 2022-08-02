@@ -206,11 +206,19 @@ helm install app-dev app-helmChart --set igress.app.host=dev.prtest.tech -n dev
 helm install app-stage app-helmChart --set ingress.app.host=stage.prtest.tech -n stage
 helm install app-prod app-helmChart --set ingress.app.host=prtest.tech -n prod
 ```
+Don`t forget to change subdomains on your own.
+
 
 
 ## Install and setup Sonar Qube
 
 ### Step 1 (install Sonar Qube)
+
+- Create namespace ops:
+```
+kubectl create namespace ops
+```
+
 - Install Sonar Qube using Helm Chart:
 ```
 install sonar-qube sonarqube-helmChart -n sonarqube
