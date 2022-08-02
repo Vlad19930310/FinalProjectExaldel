@@ -63,8 +63,8 @@ build-wagtail-dev:
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
-  variables:
-    SA_PASSWORD: "123"
+    variables:
+      SA_PASSWORD: "123"
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
