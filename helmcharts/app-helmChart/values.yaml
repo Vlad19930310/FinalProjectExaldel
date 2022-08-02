@@ -52,6 +52,9 @@ containers:
     image: gcr.io/internship87task8/wagtail:latest
     ports:
       containerPort: 8000
+  variables:
+    SA_PASSWORD: $SA_PASSWORD
+
 
 
 
