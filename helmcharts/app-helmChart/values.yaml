@@ -50,6 +50,12 @@ containers:
   app:
     name : app-wagtail
     image: gcr.io/internship87task8/wagtail:latest
+    env: 
+     - name: SECRET_USERNAME 
+       valueFrom: 
+         secretKeyRef: 
+           name: dbsecret 
+           key: username 
     ports:
       containerPort: 8000
   variables:
