@@ -23,7 +23,12 @@ spec:
               valueFrom: 
                 secretKeyRef: 
                   name: dbname
-                  key: username 
+                  key: username
+            - name: SECRETUSERNAME 
+              valueFrom: 
+                secretKeyRef: 
+                  name: dbpassword
+                  key: password
 
 ---
 apiVersion: {{ .Values.HPA.apiVersion }}
