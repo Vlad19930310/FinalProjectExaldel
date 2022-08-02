@@ -1,0 +1,70 @@
+app:
+  name: web-deployment-autoscaling
+  apiVersion : apps/v1  
+  project: internship87task8
+  metadata:
+    labels:
+      app : k8s-deployment
+
+HPA:
+  apiVersion: autoscaling/v2beta1   
+  name: autoscaling
+  spec:
+    scaleTargetRef:
+      apiVersion: apps/v2beta2
+      kind: Deployment
+      name: web-deployment-autoscaling
+  minReplicas: 2
+  maxReplicas: 6
+  cpu:
+    targetAverageUtilization: 70
+  memory:
+    targetAverageUtilization: 80
+
+service:
+  apiVersion: v1
+  name: autoscaling-pod-service
+  metadata:    
+    labels:
+      env  : prod  
+  ports:
+      name      : app-listener
+      protocol  : TCP
+      port      : 80  # Port on Load Balancer
+      targetPort: 8000  # Port on Pod
+  type: ClusterIP
+
+ingress:
+  apiVersion: networking.k8s.io/v1  
+  name: main-ingress  
+  secretName: app-tls        
+  app:
+    host: prtest.tech          
+    pathType: Prefix
+    path: /              
+    name: autoscaling-pod-service
+    port: 
+      number: 8000
+
+containers:
+  app:
+    name : app-wagtail
+    image: gcr.io/internship87task8/wagtail:latest
+    ports:
+      containerPort: 8000
+    env:
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysecret
+              key: password
+
+
+
+
+
