@@ -37,9 +37,9 @@ service:
 ingress:
   apiVersion: networking.k8s.io/v1  
   name: main-ingress  
-  secretName: app-tls        
+  secretName: app-tls 
   app:
-    host: prtest.tech          
+    host: dev.prtest.tech          
     pathType: Prefix
     path: /              
     name: autoscaling-pod-service
@@ -62,7 +62,7 @@ containers:
           valueFrom:
             secretKeyRef:
               name: mysecret
-              key: password
+              key: password      
 
 
 
