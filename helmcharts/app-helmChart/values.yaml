@@ -53,16 +53,16 @@ containers:
     ports:
       containerPort: 8000
     env:
-        - name: USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: mysecret
-              key: username
-        - name: PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysecret
-              key: password
+    - name: USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: my-secret
+          key: username
+    - name: PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: my-secret
+          key: password
 
 
 
