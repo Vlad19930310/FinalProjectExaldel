@@ -19,17 +19,16 @@ spec:
           ports:
             - containerPort: {{ .Values.containers.app.ports.containerPort }}
           env: 
-            - name: SECRETUSERNAME 
+            - name: DBUSERNAME 
               valueFrom: 
                 secretKeyRef: 
-                  name: dbname
+                  name: dbpass
                   key: username
-            - name: SECRETPASSWORD 
+            - name: DBPASSWORD 
               valueFrom: 
                 secretKeyRef: 
-                  name: dbpassword
+                  name: dbpass 
                   key: password
-
 ---
 apiVersion: {{ .Values.HPA.apiVersion }}
 kind: HorizontalPodAutoscaler
