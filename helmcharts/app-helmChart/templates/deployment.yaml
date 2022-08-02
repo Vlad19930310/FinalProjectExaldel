@@ -24,6 +24,7 @@ spec:
                 secretKeyRef: 
                   name: dbsecret 
                   key: username 
+                  
 
 ---
 apiVersion: {{ .Values.HPA.apiVersion }}
