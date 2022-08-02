@@ -58,8 +58,6 @@ containers:
            key: username 
     ports:
       containerPort: 8000
-  variables:
-    SA_PASSWORD: $SA_PASSWORD
 
 
 
