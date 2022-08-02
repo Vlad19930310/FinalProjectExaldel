@@ -88,8 +88,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'wagtail',
-        'USER': os.environ['DBUSERNAME'],
-        'PASSWORD': os.environ['DBPASSWORD'],
+        'USER': 'dbuser',
+        'PASSWORD': 'dbpassword',
         'HOST': '10.72.2.27',
         'PORT': '5432',
     }
