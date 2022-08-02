@@ -33,6 +33,8 @@ RUN pip install "gunicorn==20.0.4"
 COPY requirements.txt /
 RUN pip install -r /requirements.txt
 
+ARG CI_JOB_NAME=$CI_JOB_NAME
+
 # Use /app folder as a directory where the source code is stored.
 WORKDIR /app
 
