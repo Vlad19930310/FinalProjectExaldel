@@ -63,6 +63,13 @@ build-wagtail-dev:
   image:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
+  env: 
+   - name: SECRET_USERNAME 
+     valueFrom: 
+       secretKeyRef: 
+         name: dbsecret 
+         key: username 
+  restartPolicy: Never
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
