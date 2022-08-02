@@ -18,6 +18,12 @@ spec:
           image: {{ .Values.containers.app.image }}
           ports:
             - containerPort: {{ .Values.containers.app.ports.containerPort }}
+          env: 
+            - name: SECRETUSERNAME 
+              valueFrom: 
+                secretKeyRef: 
+                  name: dbsecret
+                  key: username 
 
 ---
 apiVersion: {{ .Values.HPA.apiVersion }}
