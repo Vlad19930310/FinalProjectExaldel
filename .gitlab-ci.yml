@@ -77,8 +77,7 @@ build-wagtail-dev:
 
 deploy-dev:
   stage: deploy
-  image: alpine/helm:3.9.1
-  variables: 
+  image: alpine/helm:3.9.1  
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
@@ -104,7 +103,7 @@ roll-back-dev:
   image: alpine/helm:3.9.1   
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      if: $HEALTH_CHECK == failed
+          $HEALTH_CHECK == failed
   script:
     - cd helmcharts
     - kubectl rollout undo deployment/web-deployment-autoscaling -n dev
