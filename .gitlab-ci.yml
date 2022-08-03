@@ -102,8 +102,7 @@ roll-back-dev:
   stage: roll-back
   image: alpine/helm:3.9.1   
   rules:
-    - if: $HEALTH_CHECK == "failed" 
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $HEALTH_CHECK == "failed" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
           
   script:
     - cd helmcharts
