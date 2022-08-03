@@ -15,13 +15,11 @@
   - EXTRA: SonarQube integration.
 
 ## Prepare development environment (Raman Pitselmakhau)
-ос - лучше линукс(убунту) но можно и винда
-поставить докер, google cli, helm3, kubectl, git, vscode 
-
+ос - Linux or Windows
+apps - Docker, Google cli, helm3, kubectl, git, VScode or Pycharm
 
 
 ## Setup k8s cluster in GCP
-
 ### Step 1 (install gclooud CLI and kubectl) 
 
 - Download and install the gcloud command line tool at its [install page](https://cloud.google.com/sdk/docs/install). It will help you create and communicate with a Kubernetes cluster. 
@@ -46,9 +44,7 @@ gcloud container node-pools create pool-1 --cluster=kuber --enable-autoscaling -
 [![Screenshot-from-2022-08-01-16-39-47.png](https://i.postimg.cc/15HCkLwZ/Screenshot-from-2022-08-01-16-39-47.png)](https://postimg.cc/jLD4N3M8)
 
 
-
-## Initial cluster setting 
-
+## Initial cluster setting
 ### Step 1 (deploy the ingress controller)
 - deploy the ingress controller and other recources we need with the following command:
 ```
@@ -81,7 +77,6 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 
 ### Step 5 (add information in ingresses)
 - Add information in every ingress file
-
 
 
 ## Configure CI/CD (Raman Pitselmakhau)
@@ -164,6 +159,71 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
   ```
 
 
+## Deploy database and make backups (Raman Pitselmakhau)      
+### Step 1 (create namespace, secret, SA)
+  - First, you need to create a namespace for DB:
+  ```
+  kubectl create namespace postgres-app
+  ```
+  - Then make a secret file:
+  ```
+  apiVersion: v1
+  stringData:
+    postgresPassword: "****"
+    password: "****"
+    replicationPassword: "****"
+  kind: Secret
+  metadata:
+    name: postgre-secret
+  type: Opaque
+  ```
+  - And push this secret to your namespace with this command:
+  ```
+  kubectl apply -f postgre-secret.yaml -n postgres-app
+  ```
+  - Create another SA in google cloud with permissions to read image in the container registry. Its backend storage is a backet with name "artifacts.internship87task8.appspot.com"
+  ```
+  gcloud iam service-accounts create image-pull --project=internship87task8 --display-name=image-pull
+  ```
+  - Google SA must have the role to read objects from the bucket, the role we need is "storage.objectViewer" and you can set it to your SA by the following command:
+  ```
+  # for Windows
+  #gcloud projects add-iam-policy-binding internship87task8 --member="serviceAccount:image-pull@internship87task8.iam.gserviceaccount.com" --role=roles/storage.objectViewer --condition=title="read-container-registry",expression="resource.name.startsWith(""projects/_/buckets/artifacts.internship87task8.appspot.com"")"
+  # for Linux
+  gcloud projects add-iam-policy-binding internship87task8 --member="serviceAccount:image-pull@internship87task8.iam.gserviceaccount.com" --role=roles/storage.objectViewer --condition=title="read-container-registry",expression='resource.name.startsWith("projects/_/buckets/artifacts.internship87task8.appspot.com")'
+  
+  # create json key
+  gcloud iam service-accounts keys create pull-secret.json --iam-account=image-pull@internship87task8.iam.gserviceaccount.com
+  
+  # create image-pull secret from json key
+  kubectl create secret docker-registry gcr-json-key --docker-server=eu.gcr.io --docker-username=_json_key --docker-password="$(cat pull-secret.json)" --docker-email=image-pull@internship87task8.iam.gserviceaccount.com -n postgres-app
+ 
+  # create a service account in the google project 
+  gcloud iam service-accounts create backup --project=internship87task8 --display-name=backup
+  
+  # connect SA in the kubernetes to SA in google project
+  gcloud iam service-accounts add-iam-policy-binding "backup@internship87task8.iam.gserviceaccount.com" --member="serviceAccount:internship87task8.svc.id.goog[postgres-app/backup]" --role=roles/iam.workloadIdentityUser --project=internship87task8 --condition=title="write-backup",expression='resource.name.startsWith("projects/_/buckets/backuppostgre")'
+
+  # create service account for the database backup cronjob:
+  kubectl create sa backup -n postgres-app
+
+  # annotate SA 
+  kubectl annotate serviceaccount backup --namespace postgres-app iam.gke.io/gcp-service-account=backup@internship87task8.iam.gserviceaccount.com
+  ```
+### Step 2 (install database)
+  - Apply this command to fetch  helm chart to your pc:
+  ```
+  helm fetch bitnami/postgresql
+  ```
+  - Then go to values.yaml and change it according to my [file](manual/postgres/values.yaml)
+  - Install database
+  ```
+  helm install postgres bitnami/postgresql -f values.yaml -n postgres-app
+  ```
+  - Then the CI/CD will deploy cronjob from the helm chart in the repo  
+  - My congrats now you have PostgreSQL database in your cluster and backups for it
+
+
 ## Installing Wagtail application wich working with postgresql ubuntu 20.04
 # Install wagtail  
 1. Update system  ```apt-get update``` verify installed python  
@@ -191,13 +251,8 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 18. For configuring type of Database and connection setting you can modify ```base.py``` in ```mysite/settings``` 
 19. For securing connection to Database using Gitlab secret, and kubectl secret.  
 
-### Step 4 ()
-### Step 5 ()
-
-
 
 ## Setup application from Helm Chart
-
 ### Step 1 (create namespaces)
 - Create namespaces, which we will use for installation versions of our application by the commands:
 ```
@@ -213,7 +268,6 @@ helm install app-stage app-helmChart --set ingress.app.host=stage.prtest.tech -n
 helm install app-prod app-helmChart --set ingress.app.host=prtest.tech -n prod
 ```
 Don`t forget to change subdomains on your own.
-
 
 
 ## Install and setup Sonar Qube
@@ -264,4 +318,27 @@ password: admin
  [![Screenshot-from-2022-07-28-21-29-48.png](https://i.postimg.cc/s2f01CG3/Screenshot-from-2022-07-28-21-29-48.png)](https://postimg.cc/75cNQcNR)
 
 
+## Logging and monitoring (Raman Pitselmakhau)
+### Step 1(ECK)
+  - To let monitoring work, a cluster must have kubernetes-monitoring-server installed. This component   provides metrics for internal cluster resources.
+    And a tool that will collect metrics from populated metric endpoints. There are several of them:
+      - Prometheus
+      - ELK
+      - etc....
+  - I chose ELK with special deployment method for Kubernetes. It is ECK stack -Elastic Cloud on Kubernetes.
+  The tool is built on the Kubernetes Operator pattern that extends Kubernetes orchestration capabilities 
+  and simplifies setup, upgrades, snapshots, scaling, high availability, security of Elasticsearch and Kibana on Kubernetes.
+  There is a [guide](https://www.elastic.co/guide/en/cloud-on-k8s/current/index.html)
+  - Installation includes several steps:
+       1. Deploy ECK operator via helm chart into cluster 
+       2. Create and deploy a manifest file for Elasticsearch & Kibana.  You can see my manifest [here](manual/ECK/eck.yaml)
+       3. Then apply the port forward command to make a possibility to open Kibana on localhost and the second command to take the secret with password:
+      ```
+      kubectl port-forward service/eck-kibana-kb-http 5601 -n elastic-system.
+       kubectl get secret eck-es-es-elastic-user -o go-template='{{.data.elastic | base64decode }}'
+      ```
+       Open the link [https://localhost:5601](https://localhost:5601/), enter a default username "elastic" and the password from  the command above.
+       4. Go to "Integrations" -> "Kubernetes" -> turn on a necessary features, install the integration and get a config file for agents. 
+          Also, you need to change this config to use ECK operator custom resource to install agents in the cluster. 
+       5. Here is [mine](manual/ECK/elastic-agent-standalone-kubernetes2.yaml).
 
