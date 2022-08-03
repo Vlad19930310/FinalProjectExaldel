@@ -93,7 +93,7 @@ health-wagtail-dev:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
-        HEALTH_CHECK=$CI_JOB_STATUS
+        HEALTH_CHECK: $CI_JOB_STATUS
   script:
     - nslookup dev.prtest.tech:80
     - curl dev.prtest.tech:80
