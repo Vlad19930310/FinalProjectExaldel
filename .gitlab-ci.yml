@@ -101,8 +101,7 @@ health-wagtail-dev:
 
 roll-back-dev:
   stage: roll-back
-  image: alpine/helm:3.9.1
-  variables: 
+  image: alpine/helm:3.9.1   
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
           $HEALTH_CHECK == failed
