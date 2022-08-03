@@ -5,6 +5,8 @@ stages:
   - test
   - deploy-prod
   - roll-back
+  - test-prod
+  - roll-back-prod
   
 variables:
   PACKAGE_NAME: "awesome-django-app"
@@ -96,13 +98,12 @@ health-wagtail-dev:
   script:
     - nslookup dev.prtest.tech 
     - curl https://bug.prtest.tech   
-  #allow_failure: true 
 
 roll-back-dev:
   stage: roll-back
   image: alpine/helm:3.9.1   
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  #$HEALTH_CHECK == "failed" &&         
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH       
   script:
     - cd helmcharts
     - helm rollback app-dev -n dev
@@ -143,8 +144,7 @@ build-wagtail-stage:
       /kaniko/executor
       --context "application/mysite"
       --dockerfile "application/mysite/Dockerfile"
-      --destination "gcr.io/internship87task8/wagtail:$IMAGE_TAG"
-    
+      --destination "gcr.io/internship87task8/wagtail:$IMAGE_TAG"    
 
 deploy-stage:
   stage: deploy
@@ -156,21 +156,28 @@ deploy-stage:
   script:
     - cd helmcharts
     - helm upgrade --install app-stage app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set ingress.app.host=stage.prtest.tech -n stage    
-  
-
 
 health-wagtail-stage:
   stage: test
   image: wbitt/network-multitool
   rules:    
     - if: $CI_COMMIT_TAG
-      variables:
-        IMAGE_TAG: $CI_COMMIT_TAG 
+#      variables:
+#        IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - nslookup stage.prtest.tech
     - curl https://stage.prtest.tech
-    
 
+roll-back-stage:
+  stage: roll-back
+  image: alpine/helm:3.9.1   
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH        
+  script:
+    - cd helmcharts
+    - helm rollback app-stage -n stage
+  when: on_failure    
+    
 deploy-production:
   stage: deploy-prod  
   image: alpine/helm:3.9.1
@@ -183,6 +190,25 @@ deploy-production:
     - helm upgrade --install app-prod app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set ingress.app.host=prtest.tech -n prod       
   when: manual
 
+health-wagtail-stage:
+  stage: test
+  image: wbitt/network-multitool
+  rules:    
+    - if: $CI_COMMIT_TAG
+#      variables:
+#        IMAGE_TAG: $CI_COMMIT_TAG 
+  script:
+    - nslookup prtest.tech
+    - curl https://prtest.tech
 
+roll-back-stage:
+  stage: roll-back
+  image: alpine/helm:3.9.1   
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH        
+  script:
+    - cd helmcharts
+    - helm rollback app-prod -n prod
+  when: on_failure    
 
 
