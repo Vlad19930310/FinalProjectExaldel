@@ -96,14 +96,14 @@ health-wagtail-dev:
   script:
     - nslookup dev.prtest.tech :80
     - curl dev.prtest.tech :80
-    - echo "$HEALTH_CHECK"
+    - echo "$HEALTH_CHECK "
   allow_failure: true 
 
 roll-back-dev:
   stage: roll-back
   image: alpine/helm:3.9.1   
   rules:
-    - if: $HEALTH_CHECK == failed && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $HEALTH_CHECK == "failed" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
           
   script:
     - cd helmcharts
