@@ -248,6 +248,7 @@ health-wagtail-prod:
   script:
     - nslookup bug.prtest.tech
     - curl https://prtest.tech
+  when: on_success
 
 roll-back-prod:
   stage: roll-back-prod
