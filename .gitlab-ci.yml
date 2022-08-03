@@ -3,8 +3,8 @@ stages:
   - build
   - deploy
   - test
-  - deploy-prod
   - roll-back
+  - deploy-prod
   - test-prod
   - roll-back-prod
   
@@ -186,7 +186,7 @@ deploy-production:
     - helm upgrade --install app-prod app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set ingress.app.host=prtest.tech -n prod       
   when: manual
 
-health-wagtail-stage:
+health-wagtail-prod:
   stage: test-prod
   image: wbitt/network-multitool
   rules:    
