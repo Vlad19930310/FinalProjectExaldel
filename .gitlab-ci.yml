@@ -104,7 +104,7 @@ roll-back-dev:
   image: alpine/helm:3.9.1   
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-          $HEALTH_CHECK == failed
+      if: $HEALTH_CHECK == failed
   script:
     - cd helmcharts
     - kubectl rollout undo deployment/web-deployment-autoscaling -n dev
