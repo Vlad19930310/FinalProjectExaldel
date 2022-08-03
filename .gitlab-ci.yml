@@ -3,8 +3,8 @@ stages:
   - build
   - deploy
   - test
-  - deploy-prod
   - roll-back
+  - deploy-prod
   - test-prod
   - roll-back-prod
   
@@ -96,7 +96,7 @@ health-wagtail-dev:
       variables:
         HEALTH_CHECK: $CI_JOB_STATUS
   script:
-    - nslookup dev.prtest.tech 
+    - nslookup bug.prtest.tech 
     - curl https://dev.prtest.tech   
 
 roll-back-dev:
@@ -161,7 +161,7 @@ health-wagtail-stage:
   rules:    
     - if: $CI_COMMIT_TAG 
   script:
-    - nslookup stage.prtest.tech
+    - nslookup bug.prtest.tech
     - curl https://stage.prtest.tech
 
 roll-back-stage:
@@ -186,20 +186,20 @@ deploy-production:
     - helm upgrade --install app-prod app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set ingress.app.host=prtest.tech -n prod       
   when: manual
 
-health-wagtail-stage:
+health-wagtail-prod:
   stage: test-prod
   image: wbitt/network-multitool
   rules:    
     - if: $CI_COMMIT_TAG
   script:
-    - nslookup prtest.tech
+    - nslookup bug.prtest.tech
     - curl https://prtest.tech
 
-roll-back-stage:
+roll-back-prod:
   stage: roll-back-prod
   image: alpine/helm:3.9.1   
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH        
+    - if: $CI_COMMIT_TAG        
   script:
     - cd helmcharts
     - helm rollback app-prod -n prod
