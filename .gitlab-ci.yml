@@ -93,7 +93,7 @@ health-wagtail-dev:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH      
   script:
     - nslookup dev.prtest.tech
-    - curl https://dev.prtest.tech
+    - curl http://dev.prtest.tech
       
 sonar-scan-stage:
   stage: sonar-scan  
