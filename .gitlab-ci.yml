@@ -107,6 +107,7 @@ lint-backup:
   image: alpine/helm:3.9.1
   script:
     - cd helmcharts
+    - echo helm upgrade --install backup backup -n "$DATABASE_NAMESPACE" --set image.name="gcr.io/internship87task8/backup:$BACKUP_IMAGE_TAG" --dry-run
     - helm lint backup
     - helm upgrade --install backup backup -n "$DATABASE_NAMESPACE" --set image.name="gcr.io/internship87task8/backup:$BACKUP_IMAGE_TAG" --dry-run
   rules:
