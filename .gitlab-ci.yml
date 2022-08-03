@@ -97,7 +97,7 @@ health-wagtail-dev:
   script:
     - nslookup dev.prtest.tech:80
     - curl dev.prtest.tech:80
-  allow_failure: true
+  allow_failure: true 
 
 roll-back-dev:
   stage: roll-back
