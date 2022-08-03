@@ -4,9 +4,8 @@ stages:
   - test
   - deploy
   - healthcheck
-  - deploy-prod
   - roll-back
-  - test-prod
+  - deploy-prod
   - healthcheck-prod
   - roll-back-prod
   
@@ -248,14 +247,14 @@ health-wagtail-prod:
   rules:    
     - if: $CI_COMMIT_TAG
   script:
-    - nslookup prtest.tech
+    - nslookup bug.prtest.tech
     - curl https://prtest.tech
 
 roll-back-prod:
   stage: roll-back-prod
   image: alpine/helm:3.9.1   
   rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH        
+    - if: $CI_COMMIT_TAG
   script:
     - cd helmcharts
     - helm rollback app-prod -n prod
