@@ -97,7 +97,7 @@ health-wagtail-dev:
         HEALTH_CHECK: $CI_JOB_STATUS
   script:
     - nslookup dev.prtest.tech 
-    - curl https://bug.prtest.tech   
+    - curl https://dev.prtest.tech   
 
 roll-back-dev:
   stage: roll-back
@@ -161,9 +161,7 @@ health-wagtail-stage:
   stage: test
   image: wbitt/network-multitool
   rules:    
-    - if: $CI_COMMIT_TAG
-#      variables:
-#        IMAGE_TAG: $CI_COMMIT_TAG 
+    - if: $CI_COMMIT_TAG 
   script:
     - nslookup stage.prtest.tech
     - curl https://stage.prtest.tech
@@ -195,8 +193,6 @@ health-wagtail-stage:
   image: wbitt/network-multitool
   rules:    
     - if: $CI_COMMIT_TAG
-#      variables:
-#        IMAGE_TAG: $CI_COMMIT_TAG 
   script:
     - nslookup prtest.tech
     - curl https://prtest.tech
