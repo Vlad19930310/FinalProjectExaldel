@@ -107,7 +107,7 @@ roll-back-dev:
           
   script:
     - cd helmcharts
-    - kubectl rollout undo deployment/web-deployment-autoscaling -n dev
+    - helm rollback app-dev -n dev
       
 sonar-scan-stage:
   stage: sonar-scan  
