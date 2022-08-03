@@ -95,19 +95,18 @@ health-wagtail-dev:
         HEALTH_CHECK: $CI_JOB_STATUS
   script:
     - nslookup dev.prtest.tech :80
-    - curl dev.prtest.tech :80
-    - echo "$HEALTH_CHECK "
-  allow_failure: true 
+    - curl dev.prtest.tech :80    
+  #allow_failure: true 
 
 roll-back-dev:
   stage: roll-back
   image: alpine/helm:3.9.1   
   rules:
-    - if: $HEALTH_CHECK == "failed" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-          
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH  #$HEALTH_CHECK == "failed" &&         
   script:
     - cd helmcharts
     - helm rollback app-dev -n dev
+  when: on_failure
       
 sonar-scan-stage:
   stage: sonar-scan  
