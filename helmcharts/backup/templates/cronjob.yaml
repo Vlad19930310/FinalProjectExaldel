@@ -1,0 +1,54 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name:  {{ include "helm-chart.fullname" . }}
+  labels:
+    {{- include "helm-chart.labels" . | nindent 4 }}
+
+spec:
+  schedule: {{ .Values.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - env:
+            - name: BUCKET
+              value: {{ .Values.bucket }}
+            - name: DATABASE
+              value: {{ .Values.database.name }}
+            - name: DB_USER
+              value: {{ .Values.database.user }}
+            - name: HOME
+              value: /home/postgres
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: {{ .Values.secret.key }}
+                  name: {{ .Values.secret.name }}
+            image: {{ .Values.image.name }}
+            imagePullPolicy: {{ .Values.image.pullpolicy }}
+            name: {{ .Chart.Name }}
+            volumeMounts:
+            - mountPath: /temp-storage
+              name: backup-volume
+            command:
+            - bash
+            - -c
+            - "set -e; cd /home/postgres; pg_dump -h postgres-postgresql -Fc -U \"$DATABASE\" \"$DB_USER\" > /temp-storage/backup_$(date '+%Y-%m-%d_%H-%M-%S').dump;  gsutil cp /temp-storage/backup_$(date '+%Y-%m-%d_%H-%M-%S').dump \"$BUCKET\"; gsutil ls \"$BUCKET\" | sort -r | awk '{if(NR>7){print $0}}' | xargs -n1 -r gsutil rm"
+            resources:
+              {{- toYaml .Values.resources | nindent 14 }}  
+            securityContext:
+              runAsUser: 1001
+          volumes:
+          - name: backup-volume
+            emptyDir: {}
+          securityContext:
+            fsGroup: 1001
+          serviceAccount: {{ .Values.serviceAccount }}
+          serviceAccountName: {{ .Values.serviceAccount }}
+          imagePullSecrets:
+          {{- with .Values.imagePullSecrets }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          restartPolicy: {{ .Values.restartPolicy }}

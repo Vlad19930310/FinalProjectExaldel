@@ -3,7 +3,8 @@ USER root
 RUN  apt-get update && \
      DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
      DEBIAN_FRONTEND=noninteractive apt-get install curl -y apt-transport-https ca-certificates gnupg locales && \
-     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
+     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" \
+     > /etc/apt/sources.list.d/google-cloud-sdk.list && \
      curl https://packages.cloud.google.com/apt/doc/apt-key.gpg > /usr/share/keyrings/cloud.google.gpg && \
      DEBIAN_FRONTEND=noninteractive apt-get update && apt-get install -y google-cloud-cli && \
      rm -rf /var/lib/apt/lists/*
