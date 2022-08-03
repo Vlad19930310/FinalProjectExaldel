@@ -96,7 +96,7 @@ health-wagtail-dev:
       variables:
         HEALTH_CHECK: $CI_JOB_STATUS
   script:
-    - nslookup bug.prtest.tech 
+    - nslookup dev.prtest.tech 
     - curl https://dev.prtest.tech   
 
 roll-back-dev:
