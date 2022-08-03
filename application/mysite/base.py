@@ -90,7 +90,7 @@ DATABASES = {
         'NAME': 'wagtail',
         'USER': os.environ['DBUSERNAME'],
         'PASSWORD': os.environ['DBPASSWORD'],
-        'HOST': '10.72.3.213',
+        'HOST': 'postgres-postgresql.postgres-app.svc.cluster.local',
         'PORT': '5432',
     }
 }
