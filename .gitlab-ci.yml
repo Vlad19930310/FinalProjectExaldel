@@ -205,7 +205,7 @@ deploy-backup:
   script:
     - cd helmcharts
     - helm upgrade --install backup backup -n "$DATABASE_NAMESPACE" --set image.name="gcr.io/internship87task8/backup:$BACKUP_IMAGE_TAG"
-   rules:
+  rules:
     - if: $CI_COMMIT_TAG
       variables:
         BACKUP_IMAGE_TAG: $CI_COMMIT_TAG
