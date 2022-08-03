@@ -92,7 +92,7 @@ health-wagtail-dev:
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       variables:
-        HEALTH_CHECK: $CI_JOB_STATUS
+        HEALTH_CHECK: "$CI_JOB_STATUS"
   script:
     - nslookup dev.prtest.tech:80
     - curl dev.prtest.tech:80
@@ -103,7 +103,7 @@ roll-back-dev:
   image: alpine/helm:3.9.1   
   rules:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-          $HEALTH_CHECK == failed
+          $HEALTH_CHECK == "failed"
   script:
     - cd helmcharts
     - kubectl rollout undo deployment/web-deployment-autoscaling -n dev
