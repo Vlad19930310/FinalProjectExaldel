@@ -226,7 +226,10 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 
 ## Installing Wagtail application wich working with postgresql ubuntu 20.04
 # Install wagtail  
-1. Update system  ```apt-get update``` verify installed python  
+1. Update system verify installed python 
+```
+apt-get update
+``` 
 2. Install pip ```python get-pip.py```
 - pip package manager for python application 
 3. Install wagtail ```pip install wagtail```
