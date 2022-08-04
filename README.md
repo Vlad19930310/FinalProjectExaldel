@@ -16,6 +16,7 @@
 
 ## Prepare development environment (Raman Pitselmakhau)
 ос - Linux or Windows
+
 apps - Docker, Google cli, helm3, kubectl, git, VScode or Pycharm
 
 
@@ -81,43 +82,47 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 
 ## Configure CI/CD (Raman Pitselmakhau)
 ### Step 1 (create account and project)
-  - Создайте аккаунт на [GitLab](https://docs.gitlab.com/ee/user/profile/account/create_accounts.html);
-  - Создайте [проект](https://docs.gitlab.com/ee/user/project/working_with_projects.html).
+  - Create an account on [GitLab] [GitLab](https://docs.gitlab.com/ee/user/profile/account/create_accounts.html);
+  - Create [project](https://docs.gitlab.com/ee/user/project/working_with_projects.html).
 ### Step 2 (deploy gitlab runner to cluster)
-  - Выбирете ваш проект в "Menu".
-  - Зайдите в секцию "Settings".
-  - Выбирете вкладку "CI/CD".
-  - Найдите раздел "Runners" и разверните его.
-  - Выбирете "Show runner installation instructions" в разделе "Specific runners".
-  - Переключитесь на вкладку "Kubernetes".
-  - Нажмите на "View installation instructions".
-  - В верхней части открывшейся странице вы увидете заголовок "Installing GitLab Runner using the Helm Chart".
-  - Добавьте репозиторий GitLab Helm командой: 
+  - Select your project in the "Menu".
+  - Go to the "Settings" section.
+  - Select the "CI/CD" tab.
+  - Find the "Runners" section and expand it.
+  - Select "Show runner installation instructions" in the "Specific runners" section.
+  - Switch to the "Kubernetes" tab.
+  - Click on "View installation instructions".
+  - At the top of the page that opens, you will see the heading "Installing GitLab Runner using the Helm Chart".
+  - Add the GitLab Helm repository with the command: 
     ```
       helm repo add gitlab https://charts.gitlab.io
     ```
-  - Пропустите шаг с командой "helm init" так как она нужна для Helm 2 а мы работай с Helm 3
-  - Перед третьим пунктом надо создать NAMESPACE и изменить CONFIG_VALUES_FILE
+  - Skip the step with the "helm init" command as it is needed for Helm 2 and we work with Helm 3
+  - Before the third point, you need to create a NAMESPACE and change CONFIG_VALUES_FILE
     #### Create namespace 
-      - Согласно Best practice при деплое нового компонента в кластер стоит создать отдельный namespace так как в случае фатальной ошибки вы сможете убрать все ваши изменения просто удалив namespace, а так же это помогает лучше ориентироваться в кластере, контролировать права внутри конкретного namespace. Так что создадим новый namespace кломандой:
+      - According to Best practice, when deploying a new component to a cluster, it is worth creating a separate namespace, since in case of a fatal error, you can remove all your changes simply by deleting the namespace, and it also helps to better navigate the cluster, control the rights inside a specific namespace. So let's create a new namespace with the command:
       ``` 
       kubectl create namespace gitlab-runner
       ```
     #### Change values.yaml 
-      - Теперь настало время изменить CONFIG_VALUES_FILE. Для этого, командой показанной ниже, скопируйте файл к себе локально:
+      - Now it's time to change CONFIG_VALUES_FILE. To do this, use the command shown below to copy the file to yourself locally:
       ```
       mkdir test
       cd test
       helm fetch gitlab/gitlab-runner
       ```
-      - После зайдите в папку "test/gitlab-runner" и откройте файл "values.yaml". Далее найдите и замените значения так как в приведенные ниже файле:
+      - After that, go to the "test/gitlab-runner" folder and open the "values.yaml". Next, find and replace the values as in the file below:
       [diff file](docs/values.diff)
-      - runnerRegistrationToken: "And this registration token:" В это поле вставьте токен из GitLab -> "project name" -> Settings -> CI/CD -> Runners -> Specific runners -> "And this registration token:"
+      - runnerRegistrationToken: "And this registration token:" In this field, insert the token from GitLab -> "project name" -> Settings -> CI/CD -> Runners -> Specific runners -> "And this registration token:"
     #### Create google service account
-    Для настройки кластера и создания service-account будем использовать несколько инструкций
+    To configure the cluster and create a service-account, we will use several instructions
+  - 
     [workload identity](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity#migrate_applications_to)
+  - 
     [csi-driver](https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/filestore-csi-driver)
+  - 
     [container registry](https://blog.container-solutions.com/using-google-container-registry-with-kubernetes)
+  - 
     [configure kubernetes](https://blog.atomist.com/kubernetes-ingress-nginx-cert-manager-external-dns/)
     ```
       gcloud container clusters update kuber --update-addons=GcpFilestoreCsiDriver=ENABLED
@@ -126,7 +131,7 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
       gcloud container node-pools update default --cluster=kuber --workload-metadata=GKE_METADATA
 
       # create service-accounts for gitlab-runner
-      gcloud iam service-accounts create gitlab-runner --project=internship87task8
+      gcloud iam service-accounts create gitlab-runner --project=internship87task8 --display-name=gitlab-runner
 
       # allow gitlab-runner push images to container registry
       gcloud projects add-iam-policy-binding internship87task8 --member="serviceAccount:gitlab-runner@internship87task8.iam.gserviceaccount.com" --role=roles/storage.admin
@@ -152,7 +157,7 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
       done
     ```
 
-  -  Теперь в разделе "Specific runners" в "Available specific runners" вы увидете свой ранер. Так же можете увидеть namespase и поду с помощью команд:
+  - Now in "Specific runners" -> "Available specific runners" you can see the runner, as well as namespase and pods by running the following commands:
   ```
   kubectl get namespace
   kubectl get po -n gitlab-runner
@@ -188,21 +193,28 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
   - Google SA must have the role to read objects from the bucket, the role we need is "storage.objectViewer" and you can set it to your SA by the following command:
   ```
   # for Windows
-  #gcloud projects add-iam-policy-binding internship87task8 --member="serviceAccount:image-pull@internship87task8.iam.gserviceaccount.com" --role=roles/storage.objectViewer --condition=title="read-container-registry",expression="resource.name.startsWith(""projects/_/buckets/artifacts.internship87task8.appspot.com"")"
+  #gcloud projects add-iam-policy-binding internship87task8 --member="serviceAccount:image-pull@internship87task8.iam.gserviceaccount.com" \
+  --role=roles/storage.objectViewer --condition=title="read-container-registry",expression="resource.name.startsWith(""projects/_/buckets/artifacts.internship87task8.appspot.com"")"
   # for Linux
-  gcloud projects add-iam-policy-binding internship87task8 --member="serviceAccount:image-pull@internship87task8.iam.gserviceaccount.com" --role=roles/storage.objectViewer --condition=title="read-container-registry",expression='resource.name.startsWith("projects/_/buckets/artifacts.internship87task8.appspot.com")'
+  gcloud projects add-iam-policy-binding internship87task8 \
+  --member="serviceAccount:image-pull@internship87task8.iam.gserviceaccount.com" \
+  --role=roles/storage.objectViewer \
+  --condition=title="read-container-registry",expression='resource.name.startsWith("projects/_/buckets/artifacts.internship87task8.appspot.com")'
   
   # create json key
   gcloud iam service-accounts keys create pull-secret.json --iam-account=image-pull@internship87task8.iam.gserviceaccount.com
   
   # create image-pull secret from json key
-  kubectl create secret docker-registry gcr-json-key --docker-server=eu.gcr.io --docker-username=_json_key --docker-password="$(cat pull-secret.json)" --docker-email=image-pull@internship87task8.iam.gserviceaccount.com -n postgres-app
+  kubectl create secret docker-registry gcr-json-key --docker-server=eu.gcr.io --docker-username=_json_key \
+  --docker-password="$(cat pull-secret.json)" --docker-email=image-pull@internship87task8.iam.gserviceaccount.com -n postgres-app
  
   # create a service account in the google project 
   gcloud iam service-accounts create backup --project=internship87task8 --display-name=backup
   
   # connect SA in the kubernetes to SA in google project
-  gcloud iam service-accounts add-iam-policy-binding "backup@internship87task8.iam.gserviceaccount.com" --member="serviceAccount:internship87task8.svc.id.goog[postgres-app/backup]" --role=roles/iam.workloadIdentityUser --project=internship87task8 --condition=title="write-backup",expression='resource.name.startsWith("projects/_/buckets/backuppostgre")'
+  gcloud iam service-accounts add-iam-policy-binding "backup@internship87task8.iam.gserviceaccount.com" \
+  --member="serviceAccount:internship87task8.svc.id.goog[postgres-app/backup]" --role=roles/iam.workloadIdentityUser --project=internship87task8 \
+  --condition=title="write-backup",expression='resource.name.startsWith("projects/_/buckets/backuppostgre")'
 
   # create service account for the database backup cronjob:
   kubectl create sa backup -n postgres-app
@@ -335,7 +347,7 @@ password: admin
        3. Then apply the port forward command to make a possibility to open Kibana on localhost and the second command to take the secret with password:
       ```
       kubectl port-forward service/eck-kibana-kb-http 5601 -n elastic-system.
-       kubectl get secret eck-es-es-elastic-user -o go-template='{{.data.elastic | base64decode }}'
+      kubectl get secret eck-es-es-elastic-user -o go-template='{{.data.elastic | base64decode }}'
       ```
        Open the link [https://localhost:5601](https://localhost:5601/), enter a default username "elastic" and the password from  the command above.
        4. Go to "Integrations" -> "Kubernetes" -> turn on a necessary features, install the integration and get a config file for agents. 
