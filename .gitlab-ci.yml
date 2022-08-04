@@ -143,6 +143,7 @@ health-wagtail-dev:
   script:
     - nslookup bug.prtest.tech 
     - curl https://dev.prtest.tech   
+  needs: ["deploy-dev"]  
 
 roll-back-dev:
   stage: roll-back
