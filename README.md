@@ -230,19 +230,32 @@ helm install cluster-issuer ClusterIssuer-helmChart -n ingress-nginx
 ```
 apt-get update
 ``` 
-2. Install pip ```python get-pip.py```
+2. Install pip 
+```
+python get-pip.py
+```
 - pip package manager for python application 
-3. Install wagtail ```pip install wagtail```
+3. Install wagtail 
+```
+pip install wagtail
+```
 4. wagtail start mysite
 6. cd mysite
 7. add to ```requirements.txt``` strings ```psycopg2-binary>=2.8<2.9``` ```gunicorn==20.0.4```
 - psycopg2 driver for working with postrgresql
 - gunicorn converting requests received from Nginx into a format that your web application can use, and executing code as needed.
-8. pip install -r requirements.txt
+8. Install requirements.txt
+```
+pip install -r requirements.txt
+```
 - requirements.txt store information about: python version, Django, wagtail, psycopg2-binary, gunicorn
 9. Docker must be installed on system
 10. Configure ```Dockerfile``` with your configuration
-11. Buld image ```docker build -t wagtail .``` in root derictory of project
+11. Buld image 
+```
+docker build -t wagtail .
+``` 
+in root derictory of project
 12. Run Postgresql image with parametrs: 
 - ```docker run --name <future name your conteiner>``` \ 
 - ```-e POSTGRES_PASSWORD=<your password> -d -p 5432:5432 postgres```
@@ -252,7 +265,25 @@ apt-get update
 16. Push Dockerfile and all dependeces in git repo
 17. For deploying application Database container in pod must be installed.
 18. For configuring type of Database and connection setting you can modify ```base.py``` in ```mysite/settings``` 
-19. For securing connection to Database using Gitlab secret, and kubectl secret.  
+19. For securing connection to Database using Gitlab secret, and kubectl secret. 
+
+## Hiding credentials for connecting to database 
+1. Credential for conecting to database stores in ```/mysite/settings/base.py```
+2. Create kubernetes secret and map to namespace
+```
+kubectl create secret generic dbpass -n <your_namespace> --from-literal=username=<username> --from-literal=password=<passowrd>
+```
+3. Same you can configure ```.yml``` for creating secret
+4. Edit application helmchart ```deployment.yml``` add ```env:``` feed with with reference on your kubernetes secret
+5. Python can`t reed secret from kubernetis on building stage, you need to pass stages bellow for this case 
+6. Edit ```/mysite/settings/base.py```, put fake credentials in username and password feed
+7. Create same ```base.py``` file in root directory your repo
+8. In username and password feed use ```os.environ['<name_your_variable>']
+9. Edit Dockerfile, add ```COPY base.py mysite/settings/``` string. It will change base.py file in your container on your configured file
+10. Run commit changes, open pull request. Wait after you piplene will succseed 
+
+
+
 
 
 ## Setup application from Helm Chart
