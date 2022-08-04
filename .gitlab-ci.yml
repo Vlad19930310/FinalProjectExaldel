@@ -1,4 +1,4 @@
-stages:
+stages:    
   - sonar-scan
   - build
   - test
@@ -258,6 +258,6 @@ roll-back-prod:
   script:
     - cd helmcharts
     - helm rollback app-prod -n prod   
-  needs: ["health-wagtail-prod"]  
+  needs: ["health-wagtail-prod"]   
 
 
