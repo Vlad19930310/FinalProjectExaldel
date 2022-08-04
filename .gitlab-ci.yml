@@ -150,6 +150,7 @@ roll-back-dev:
   script:
     - cd helmcharts
     - helm rollback app-dev -n dev
+  needs: ["health-wagtail-dev"]
   when: on_failure
       
 sonar-scan-stage:
