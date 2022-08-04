@@ -226,7 +226,7 @@ roll-back-stage:
   script:
     - cd helmcharts
     - helm rollback app-stage -n stage
-  when: on_failure    
+   
     
 deploy-production:
   stage: deploy-prod  
@@ -247,8 +247,8 @@ health-wagtail-prod:
     - if: $CI_COMMIT_TAG
   script:
     - nslookup prtest.tech
-    - curl https://prtest.tech
-  when: on_success
+    - curl https://prtest.tech  
+  needs: ["deploy-production"] 
 
 roll-back-prod:
   stage: roll-back-prod
@@ -257,7 +257,7 @@ roll-back-prod:
     - if: $CI_COMMIT_TAG
   script:
     - cd helmcharts
-    - helm rollback app-prod -n prod
-  when: on_failure    
+    - helm rollback app-prod -n prod   
+  needs: ["health-wagtail-prod"]  
 
 
