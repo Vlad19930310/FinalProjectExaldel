@@ -130,7 +130,7 @@ deploy-dev:
   script:
     - cd helmcharts
     - helm upgrade --install app-dev app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set ingress.app.host=dev.prtest.tech -n dev    
-  when: ["on_success"]
+  
 
 
 health-wagtail-dev:
@@ -141,7 +141,7 @@ health-wagtail-dev:
       variables:
         HEALTH_CHECK: $CI_JOB_STATUS
   script:
-    - nslookup bug.prtest.tech 
+    - nslookup dev.prtest.tech 
     - curl https://dev.prtest.tech   
   needs: ["deploy-dev"]  
 
@@ -154,7 +154,7 @@ roll-back-dev:
     - cd helmcharts
     - helm rollback app-dev -n dev
   needs: ["health-wagtail-dev"]
-  when: on_failure
+  when: manual
       
 sonar-scan-stage:
   stage: sonar-scan  
@@ -201,7 +201,7 @@ deploy-stage:
   script:
     - cd helmcharts
     - helm upgrade --install app-stage app-helmChart --set containers.app.image=gcr.io/internship87task8/wagtail:$IMAGE_TAG --set ingress.app.host=stage.prtest.tech -n stage    
-  when: on_success 
+   
 
 deploy-backup:
   stage: deploy
@@ -234,7 +234,7 @@ roll-back-stage:
     - cd helmcharts
     - helm rollback app-stage -n stage
   needs: ["health-wagtail-stage"] 
-  when: on_failure  
+  when: manual
     
 deploy-production:
   stage: deploy-prod  
@@ -254,7 +254,7 @@ health-wagtail-prod:
   rules:    
     - if: $CI_COMMIT_TAG
   script:
-    - nslookup bug.prtest.tech
+    - nslookup prtest.tech
     - curl https://prtest.tech  
   needs: ["deploy-production"] 
 
@@ -267,6 +267,6 @@ roll-back-prod:
     - cd helmcharts
     - helm rollback app-prod -n prod   
   needs: ["health-wagtail-prod"] 
-  when: on_failure  
+  when: manual 
 
 
