@@ -267,6 +267,6 @@ roll-back-prod:
     - cd helmcharts
     - helm rollback app-prod -n prod   
   needs: ["health-wagtail-prod"] 
-  when: manual 
+  when: manual       
 
 
